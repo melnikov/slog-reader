@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" 
+  "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+ 
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+      <param name="Threshold" value="INFO" />
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
+      </layout>
+   </appender>
+
+    <appender name="appAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/log/tomcat6/newspaper-app.log"/>
+        <param name="MaxFileSize" value="100MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+            <layout class="org.apache.log4j.PatternLayout">
+             <param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
+          </layout>
+    </appender>
+ 
+    <appender name="springAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/log/tomcat6/newspaper-spring.log"/>
+        <param name="MaxFileSize" value="100MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="Encoding" value="UTF-8"/>
+            <layout class="org.apache.log4j.PatternLayout">
+             <param name="ConversionPattern" value="%d %-5p  [%c{1}] %m %n" />
+          </layout>
+    </appender>
+
+   <logger name="ru.gmi">
+       <level value="info" />
+       <appender-ref ref="appAppender"/>
+       <appender-ref ref="consoleAppender"/>
+   </logger>
+    
+   <logger name="org.springframework">
+       <level value="info" />
+       <appender-ref ref="springAppender"/>
+   </logger>
+
+</log4j:configuration>

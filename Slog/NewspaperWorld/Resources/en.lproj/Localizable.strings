@@ -1,0 +1,83 @@
+/* 
+  Localizable.strings
+  NewspaperWorld
+
+  Created by Eldar Pikunov on 22.08.12.
+
+*/
+
+"IDS_BOOKSTORE_TAB_TITLE"   = "Магазин";
+"IDS_SEARCH_TAB_TITLE"      = "Поиск";
+"IDS_READ_LAST"             = "Продолжить чтение";
+"IDS_FRAGMENTS"             = "Демо-версия";
+"IDS_MY_BOOKS_TITLE"        = "Моя библиотека";
+"IDS_MY_BOOKS_LIST"         = "Список книг";
+"IDS_HELP"                  = "Помощь";
+"IDS_HOW_TO_USE"            = "Как использовать";
+"IDS_ABOUT_APP"             = "О программе";
+"IDS_COPYRIGHT"             = "Сopyright (c) 2012. \nИздательство \"Газетный мир 'СЛОГ'\".";
+"IDS_VERSION"               = "Версия";
+"IDS_APPLICATION_DESCRIPTION" = "Описание приложения";
+"IDS_RECOMMENDED"           = "Рекомендуемое";
+"IDS_GENRES"                = "Жанры";
+"IDS_RETRIEVING_LIST"       = "Получение списка...";
+"IDS_INFORMATION"           = "Информация";
+"IDS_FEATURE_IN_PROGRESS"   = "Функция находится в разработке";
+"IDS_ERROR"                 = "Ошибка";
+"IDS_NETWORK_ERROR_OCCURED" = "Возникли проблемы при работе с сетью. Попробуйте повторить запрос позже.";
+"IDS_GENERAL_NETWORK_ERROR" = "Возникли проблемы при отправке запроса к серверу.";
+"IDS_BAD_FORMAT_ERROR"      = "Возникли проблемы при обработке ответа сервера.";
+"IDS_GENERAL_API_ERROR"     = "Возникли ошибки при обработке запроса сервером.";
+"IDS_REPEAT"                = "Повторить";
+"IDS_SYNCHRONIZATION_PURCHASED_LIST" = "Синхронизация покупок";
+"IDS_APPLICATION_AUTHORIZATION"      = "Авторизация приложения";
+"IDS_LOADING_CATEGORIES"             = "Загрузка категорий";
+"IDS_PERFORMING_PURCHASE"            = "Выполняется покупка";
+"IDS_PERFORMING_LOADING"             = "Выполняется загрузка";
+"IDS_LOADING"                        = "Загружается книга";
+"IDS_EMPTY_LIST"                     = "Список пуст";
+"IDS_PLEASE_WAIT"                    = "Открывается книга";
+"IDS_READ_BOOK"                      = "Читать книгу";
+"IDS_ERROR_PURCHASE_BOOK"            = "Не удалось совершить покупку";
+"IDS_PERFORMING_SEARCH"              = "Выполняется поиск";
+"IDS_TOUCH_FOR_SEARCH"               = "Коснитесь для поиска";
+"IDS_CONTENT"                        = "Содержание";
+"IDS_BACK"                           = "Назад";
+"IDS_BOOKMARKS"                      = "Закладки";
+"IDS_WHAT_THIS_PROGRAMM" = "Для чего эта программа";
+"IDS_HOW_TO_READ"        = "Как читать издания";
+"IDS_HOW_TO_BUY"         = "Как покупать издания";
+"IDS_TEXT"         = "Текст";
+"IDS_FONT"         = "Шрифт";
+"IDS_FONT_SIZE"    = "Размер шрифта";
+"IDS_TEXT_COLOR"   = "Цвет текста";
+"IDS_TEXT_EXAMPLE" = "Пример текста";
+"IDS_PDF_WARNING"  = "Данная настройка не работает\n при чтении издания\n в формате PDF";
+"IDS_SETTINGS"     = "Настройки";
+"IDS_CANT_OPEN_BOOK" = "Не удалось открыть книгу";
+"IDS_BOOK_IS_NON_EXISTS" = "Демо-фрагмент отсутствует";
+"IDS_BOOKMARK_EXISTS" = "Закладка уже существует";
+"IDS_BOOKMARK_ADDED" = "Закладка добавлена";
+"IDS_SHORT_REQUEST"  = "Слишком маленькая строка поиска";
+"IDS_BUY"  = "Купить";
+"IDS_AUTHOR" = "Автор";
+"IDS_TITLE" = "Название";
+"IDS_PURCHASE_DATE" = "Дата покупки";
+"IDS_DONE" = "Готово";
+"IDS_EDIT" = "Изменить";
+"IDS_DELETE_BOOK_ITEM_QUESTION" = "Вы действительно хотите удалить выбранный фрагмент?";
+"IDS_YES" = "Да";
+"IDS_NO" = "Нет";
+"IDS_CANCEL" = "Отмена";
+"IDS_REVIEW_TEXT_SUBJ" = "%@%@Отзыв о программе \"%@\"";
+"IDS_SPACE_ERROR_MSG" = "Нехватает свободной памяти для сохранения";
+"IDS_SAVE_ERROR_MSG" = "Ошибка сохранения файла";
+"IDS_HOURS" = "часа";
+"IDS_CLOSE" = "закрыть";
+"IDS_INCORRECT_LINK" = "Некорректная ссылка";
+"IDS_PURCHASE_RESTORING" = "Восстановление покупок";
+"IDS_IS_NEED_LOAD_PURCHASED" = "Вы хотите загрузить список купленных книг?";
+"IDS_RETURN_READING" = "Продолжить чтение";
+"IDS_BACK_CATALOG" = "В каталог";
+"IDS_RETURN_DEFAULTS" = "По умолчанию";
+"IDS_RETURN_QUESTION" = "Вы действительно хотите вернуть настройки по умолчанию?";

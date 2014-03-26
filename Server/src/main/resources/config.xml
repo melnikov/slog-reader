@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Конфигурационный файл сервера "Газетный мир".
+    Все изменения, внесенные в этот файл, будут применены только после
+    перезапуска Apache Tomcat.
+ -->
+<config>
+
+    <!-- 
+        Корневая директория для хранения книг. Полный путь. 
+    -->
+    <booksDirectory>/var/books/</booksDirectory>
+    
+    <!-- 
+        Максимальная ширина обложек для книг, которые загружаются в панель
+        администратора. Если загружаемая обложка имеет ширину большую данного
+        значения, то сервер пропорционально уменьшит изображение до указанной
+        ширины.
+     -->
+    <maxCoverWidth>300</maxCoverWidth>
+    
+    <!-- 
+        true - сервер верифицирует покупки клиента через сервисы Apple.
+        false - сервер принимает все покупки, не проверяя их.
+     -->
+    <checkPurchases>true</checkPurchases>
+    
+    <!-- 
+    
+        Адрес сервиса Apple для верификации покупок.
+    
+        debug: https://sandbox.itunes.apple.com/verifyReceipt
+        release: https://buy.itunes.apple.com/verifyReceipt
+    
+     -->
+    <verifyReceiptUrl>https://sandbox.itunes.apple.com/verifyReceipt</verifyReceiptUrl>
+
+</config>
