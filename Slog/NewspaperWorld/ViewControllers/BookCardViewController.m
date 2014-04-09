@@ -59,6 +59,7 @@
 {
     [super viewDidLoad];
     [self reloadBookCard];
+    
 }
 
 - (void)viewDidUnload
@@ -185,22 +186,34 @@
     }
     if (UIInterfaceOrientationIsLandscape(orientation))
     {
+        int marginiOS7 = 0;
+
+        if ([Utils isiOS7])
+        {
+            marginiOS7 = 60;
+        }
+        
         CGRect buttonFrame = _readBookButton.frame;
-        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height;
+        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height + marginiOS7;
         [_readBookButton setFrame:buttonFrame];
 
         buttonFrame = _readDemoButton.frame;
-        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height;
+        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height + marginiOS7;
         [_readDemoButton setFrame:buttonFrame];
 
         buttonFrame = _buyBookButton.frame;
-        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height;
+        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height +marginiOS7;
         [_buyBookButton setFrame:buttonFrame];
 
         annFrame.origin.y = _bookItemView.frame.origin.y + _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height + verticalMargin;
     }
    
-    annFrame.size.height = self.view.bounds.size.height - annFrame.origin.y - 2*verticalMargin;
+    int marginiOS7 = 0;
+    if ([Utils isiOS7])
+    {
+        marginiOS7 = 40;
+    }
+    annFrame.size.height = self.view.bounds.size.height - annFrame.origin.y - 2*verticalMargin - marginiOS7;
     [_bookAnnotation setFrame:annFrame];
 }
 
@@ -327,4 +340,6 @@
 {
     [SVProgressHUD dismiss];
 }
+
+
 @end

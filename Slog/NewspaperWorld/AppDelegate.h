@@ -4,6 +4,7 @@
 //
 
 #import "NWApiClientDelegate.h"
+#import "SGHyphenator.h"
 
 /**
  @brief This is a main application class
@@ -15,6 +16,8 @@
     NSDictionary*   _notificationsViewControllers;
     
     SEL             _lastNetworkOperationSelector;
+    
+    
 }
 
 /**
@@ -29,5 +32,7 @@
 @property(retain, nonatomic) UISplitViewController *splitViewController; // splitviewcontroller for ipad
 
 @property(retain, nonatomic) UINavigationController *detailNavigationController; // navigationcontroller for ipad
+
+@property(retain, nonatomic) SGHyphenator * hyphenator;
 
 @end

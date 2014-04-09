@@ -119,9 +119,15 @@ static void singleton_remover()
 - (void)getCategoriesWithDelegate:(NSObject<NWApiClientDelegate> *)delegate
                          language:(NSString *)language
 {
-    NSDictionary* parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    _token,     NWApiRequestParameterToken,
-                                    language,   NWApiRequestParameterLanguage, nil];
+        NSDictionary* parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        _token,     NWApiRequestParameterToken,
+                                        language,   NWApiRequestParameterLanguage, nil];
+#warning iOS7 need fix
+    if ([Utils isiOS7]){
+        parameters = nil;
+    }
+ 
+    
     [self invokeMethodNamed:NWApiMethodGetCategories parameters:parameters delegate:delegate];
 }
 

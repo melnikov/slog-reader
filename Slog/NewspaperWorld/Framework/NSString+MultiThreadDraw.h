@@ -20,4 +20,6 @@
 - (CGSize)MTSizeWithFont:(UIFont *)font;
 - (CGSize)MTSizeWithFont:(UIFont *)font forWidth:(CGFloat)width lineBreakMode:(NSLineBreakMode)lineBreakMode;
 
+- (NSString*)hyphenatedStringWithLocale:(NSLocale*)locale;
+
 @end

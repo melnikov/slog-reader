@@ -98,6 +98,13 @@ const static int myBooksCellRow     = 2;
     
     self.contentSizeForViewInPopover = CGSizeMake(320.0, 300.0);
     
+    
+//    CGRect frame = _storeBackgroundView.frame;
+//    _storeBackgroundView.frame = CGRectMake(frame.origin.x, frame.origin.y+40, frame.size.width, frame.size.height);
+//    
+//    frame = _myBooksBackgroundView.frame;
+//    _myBooksBackgroundView.frame = CGRectMake(frame.origin.x, frame.origin.y+40, frame.size.width, frame.size.height);
+    
     _yOrigin = _storeBackgroundView.frame.origin.y;
 }
 
@@ -122,11 +129,18 @@ const static int myBooksCellRow     = 2;
     //extra check and correction lack of navigation bar shift after splash screen rotation
     if (self.navigationController.navigationBar.frame.origin.y > 0)
     {
-        CGRect navFrame = self.navigationController.navigationBar.frame;
-        self.navigationController.navigationBar.frame = CGRectMake(navFrame.origin.x,0.0f, navFrame.size.width,navFrame.size.height);
-        CGRect frame =  _storeBackgroundView.frame;
-        _storeBackgroundView.frame = CGRectMake(frame.origin.x,LACK_OF_STORE_BGVIEW, frame.size.width, frame.size.height);
-        _myBooksBackgroundView.frame = CGRectMake(frame.origin.x,LACK_OF_MYBOOK_BGVIEW, frame.size.width, frame.size.height);
+        
+        
+        if ([Utils isiOS7]){
+            //CGRect navFrame = self.navigationController.navigationBar.frame;
+            //self.navigationController.navigationBar.frame = CGRectMake(navFrame.origin.x,0.0f, navFrame.size.width,navFrame.size.height);
+        }else{
+            CGRect navFrame = self.navigationController.navigationBar.frame;
+            self.navigationController.navigationBar.frame = CGRectMake(navFrame.origin.x,0.0f, navFrame.size.width,navFrame.size.height);
+            CGRect frame =  _storeBackgroundView.frame;
+            _storeBackgroundView.frame = CGRectMake(frame.origin.x,LACK_OF_STORE_BGVIEW, frame.size.width, frame.size.height);
+            _myBooksBackgroundView.frame = CGRectMake(frame.origin.x,LACK_OF_MYBOOK_BGVIEW, frame.size.width, frame.size.height);
+        }
     }
     else
     {
@@ -270,12 +284,17 @@ const static int myBooksCellRow     = 2;
 #pragma mark Private methods
 - (CGFloat)calculateStoreSectionViewHeight
 {
+    int marginiOS7 = 0;
+    if ([Utils isiOS7]){
+        marginiOS7 = 60;
+    }
+    
     CGFloat superViewHeight = _storeBackgroundView.superview.bounds.size.height;
     CGFloat bottomViewHeight = _bottomView.bounds.size.height;
     CGFloat currentMyBooksViewHeight = (_myBooksBackgroundView.isExpanded) ? _myBooksBackgroundView.expandButtonHeight + _myBooksBackgroundView.expandHeight
                                                                            : _myBooksBackgroundView.expandButtonHeight;
     
-    CGFloat newHeight = (_storeBackgroundView.isExpanded && _categories.count > 0) ? superViewHeight - bottomViewHeight - currentMyBooksViewHeight
+    CGFloat newHeight = (_storeBackgroundView.isExpanded && _categories.count > 0) ? superViewHeight - bottomViewHeight - currentMyBooksViewHeight - marginiOS7
                                                           : _storeBackgroundView.expandButtonHeight;
     
     return newHeight;
@@ -283,8 +302,13 @@ const static int myBooksCellRow     = 2;
 
 - (void)updateSectionsGeometry;
 {
+    int marginiOS7 = 0;
+    if ([Utils isiOS7]){
+        marginiOS7 = 60;
+    }
+    
     CGFloat newStoreSectionHeight = [self calculateStoreSectionViewHeight];
-    CGFloat newMyBooksSectionY = newStoreSectionHeight;
+    CGFloat newMyBooksSectionY = newStoreSectionHeight + marginiOS7;
     
     CGRect newFrame = _myBooksBackgroundView.frame;
     newFrame.origin.y = newMyBooksSectionY;

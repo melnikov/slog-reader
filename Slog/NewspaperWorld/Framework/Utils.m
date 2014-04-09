@@ -13,6 +13,16 @@
 
 @implementation Utils
 
++ (BOOL)isPortrait
+{
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
+    {
+        return YES;
+    }
+    return NO;
+}
+
 +(void) addGradient:(UIButton *) _button
 {
     
@@ -255,6 +265,16 @@
   return YES;
 }
 
++ (BOOL)isiOS7 {
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    float ver_float = [ver floatValue];
+    
+    if (ver_float < 7.0)
+        return NO;
+    
+    return YES;
+}
+
 + (float)verIos
 {
     NSString *ver = [[UIDevice currentDevice] systemVersion];
@@ -478,7 +498,7 @@
     return result;
 }
 
-- (NSArray*)divideByWhitespacesAnNewlinesWithBlock:(void (^)(NSString *wordWithDelimiter, BOOL *stop))block
+- (NSMutableArray*)divideByWhitespacesAnNewlinesWithBlock:(void (^)(NSString *wordWithDelimiter, BOOL *stop))block
 {
     NSMutableArray* result = [NSMutableArray array];
     NSCharacterSet* divideSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
@@ -506,6 +526,6 @@
             [word appendFormat:@"%C", character];
         }
     }
-    return [NSArray arrayWithArray:result];
+    return result;
 }
 @end

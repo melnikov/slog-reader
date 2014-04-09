@@ -59,12 +59,16 @@
 @synthesize splitViewController = _splitViewController;
 @synthesize tabBarController = _tabBarController;
 @synthesize detailNavigationController = _detailNavigationController;
+@synthesize hyphenator = _hyphenator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [MKStoreManager sharedManager];
 
     [[NWDataModel sharedModel] loadState];
+    
+    _hyphenator = [SGHyphenator sharedInstance];
+    [_hyphenator setPatternFile:@"hyphens_ru"];
 
     _viewControllers = [[NSMutableArray alloc] init];
     _tabBarController    = nil;

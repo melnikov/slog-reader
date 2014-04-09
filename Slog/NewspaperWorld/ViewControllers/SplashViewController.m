@@ -164,6 +164,7 @@ static void singleton_remover()
             if ([UIScreen mainScreen].bounds.size.height == 568)
             {
                 _splashImageView.image = [UIImage imageNamed: @"Default-568h.png"];
+                
                 windowSize = WINDOW_SIZE_IPHONE5_PORTRAIT;
             }
             if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -196,13 +197,18 @@ static void singleton_remover()
         }
     }
     
-    CGRect imageFrame = CGRectMake(0.0f, 0.0f, windowSize.width, windowSize.height);
+    int marigniOS7 = 0;
+    if ([Utils isiOS7]){
+        marigniOS7 = 20;
+    }
+    
+    CGRect imageFrame = CGRectMake(0.0f, 0.0f, windowSize.width, windowSize.height+marigniOS7);
      _splashImageView.frame = imageFrame;
     
     CGSize fitSize = [_loadDescriptionLabel.text sizeWithFont:_loadDescriptionLabel.font];
     
     _loadDescriptionLabel.frame = CGRectMake(windowSize.width / 2 - fitSize.width / 2,
-                                             windowSize.height - fitSize.height - 20.0f,
+                                             windowSize.height+marigniOS7 - fitSize.height - 20.0f,
                                              fitSize.width,
                                              fitSize.height);
     CGFloat spinnerOriginY = _loadDescriptionLabel.frame.origin.y + (_loadDescriptionLabel.frame.size.height / 2) - (_activityIndicator.frame.size.height / 2);

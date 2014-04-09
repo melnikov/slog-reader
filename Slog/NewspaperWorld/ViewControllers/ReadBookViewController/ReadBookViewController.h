@@ -34,8 +34,14 @@
     IBOutlet UIView* _frontPage;    
     IBOutlet UIView* _bottomPage;
     
+    IBOutlet UIView* _frontPage2;
+    IBOutlet UIView* _bottomPage2;
+    
     IBOutlet FB2View*   _frontFB2View;
     IBOutlet FB2View*   _backFB2View;
+    
+    IBOutlet FB2View *  _frontFB2View2;
+    IBOutlet FB2View *  _backFB2View2;
     
     IBOutlet UIToolbar* _toolbar;
     IBOutlet UIToolbar* _toolbarWithReturn;

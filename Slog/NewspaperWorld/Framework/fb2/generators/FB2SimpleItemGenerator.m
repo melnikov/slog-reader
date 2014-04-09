@@ -14,6 +14,7 @@
 #import "FB2PageLinkItem.h"
 #import "NSString+MultiThreadDraw.h"
 #import "Utils.h"
+#import "AppDelegate.h"
 
 @implementation FB2SimpleItemGenerator
 
@@ -52,7 +53,7 @@
     }
 
     //делим на слова
-    NSArray* words = [text.plainText divideByWhitespacesAnNewlinesWithBlock:nil];
+    NSMutableArray* words = [text.plainText divideByWhitespacesAnNewlinesWithBlock:nil];
 
     CGFloat     firstStringLenght = 0;
     int     firstStringWordsCount = 0;
@@ -79,23 +80,30 @@
                       context:context
                   newPosition:CGPointMake(context.position->x + firstStringLenght, context.position->y)];
     }
+    
+    if ([firstString rangeOfString:@"У меня в комнате"].length>0){
+        NSLog(@"");
+    }
+    
 
     //Если кусок текста помещается в одну строку, то выходим
     if ((firstStringWordsCount == 0) && (firstString.length > 0))
         return;
     
     if (words.count > (firstStringWordsCount)) {
-        NSString * word = [words objectAtIndex:firstStringWordsCount];
+        //NSString * word = [words objectAtIndex:firstStringWordsCount];
 
-        CGFloat strWidth = [word MTSizeWithFont:currentItemTextStyle.textFont].width;
-        if (context.position->x + strWidth >= context.pageWidth)
-        {      
+        //CGFloat strWidth = [word MTSizeWithFont:currentItemTextStyle.textFont].width;
+        //if (context.position->x + strWidth >= context.pageWidth)
+        //{
             [context nextStringWithLineHeight:lineHeight];
-        }
+        //}
     }
 
     NSMutableString* remainingStrings = [[[NSMutableString alloc] init] autorelease];
 
+   
+    
     // get remains strings
     for(int j = firstStringWordsCount; j < words.count; j++) {
         NSString * theWord = [words objectAtIndex:j];
@@ -173,7 +181,7 @@
     return newStyle;
 }
 
-- (NSString*)getFirstStringForWordsArray:(NSArray*)words length:(CGFloat*)firstStringLenght andWordsCount:(int*)wordsCount font:(UIFont*)font context:(FB2PageGeneratorContext*)context
+- (NSString*)getFirstStringForWordsArray:(NSMutableArray*)words length:(CGFloat*)firstStringLenght andWordsCount:(int*)wordsCount font:(UIFont*)font context:(FB2PageGeneratorContext*)context
 {
     NSString*            theWord = nil;
     NSMutableString* firstString = [[[NSMutableString alloc] init] autorelease];
@@ -183,9 +191,73 @@
         theWord = [words objectAtIndex:j];
         *firstStringLenght += ([theWord MTSizeWithFont:font]).width;
         
+        if ([theWord rangeOfString:@"рознь"].length>0)
+        {
+            NSLog(@"");
+        }
+        
         if (context.position->x + *firstStringLenght >= (context.pageWidth)) {
-            *firstStringLenght -= [theWord MTSizeWithFont:font].width;
-            *wordsCount = j;
+            
+            CGFloat currentSize = *firstStringLenght - [theWord MTSizeWithFont:font].width;
+            
+            BOOL isHypher = NO;
+            
+            NSCharacterSet *charset = [NSCharacterSet whitespaceCharacterSet];
+            NSString* clearString = [theWord stringByTrimmingCharactersInSet:charset];
+            
+            charset = [NSCharacterSet characterSetWithCharactersInString:@",. \"!"];
+            clearString = [clearString stringByTrimmingCharactersInSet:charset];
+            
+            NSArray* hyp = [[AppDelegate sharedAppDelegate].hyphenator  hyphenate:clearString];
+            
+            NSString* lastS = @"";
+            
+            for (int i=0; i<hyp.count; i++) {
+                NSString* s = [NSString stringWithFormat:@"%@%@",lastS,hyp[i] ];
+                //NSLog(@"slog = %@",s);
+                
+                CGFloat sSize =  ([s MTSizeWithFont:font]).width;
+                
+                CGFloat sSizeZnak =  ([@"-" MTSizeWithFont:font]).width;
+                
+                if ((context.position->x + currentSize + sSize + sSizeZnak) >= (context.pageWidth)){
+                    isHypher = YES;
+                    break;
+                }
+                
+                //lastS = [NSString stringWithString:s];
+                lastS = [NSString stringWithFormat:@"%@",s];
+                
+            }
+            
+            
+            if ((clearString.length - lastS.length)<2){
+                //одну букву не переносим
+                isHypher = NO;
+            }
+            
+            if(isHypher && lastS.length>1 && (lastS.length<theWord.length))
+            {
+                NSString *hypText = [NSString stringWithString:lastS];
+                if (![hypText hasSuffix:@"-"]){
+                    hypText = [NSString stringWithFormat:@"%@-",lastS];
+                }
+                
+                [firstString appendString:hypText];
+                
+                NSString* lastPartText = [[theWord substringToIndex:[theWord length]] substringFromIndex:lastS.length];
+                
+                [words replaceObjectAtIndex:j withObject:lastPartText];
+                *firstStringLenght -= [hypText MTSizeWithFont:font].width;
+                *wordsCount = j;
+            }else{
+                *firstStringLenght -= [theWord MTSizeWithFont:font].width;
+                *wordsCount = j;
+            }
+            
+            
+            
+           
             break;
         } else {
             [firstString appendString:theWord];

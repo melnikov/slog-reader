@@ -17,7 +17,6 @@
 		304CA2E2161D8E030016BFF7 /* FB2PublishInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 304CA2D7161D8E030016BFF7 /* FB2PublishInfo.m */; };
 		304CA2E3161D8E030016BFF7 /* FB2Section.m in Sources */ = {isa = PBXBuildFile; fileRef = 304CA2D9161D8E030016BFF7 /* FB2Section.m */; };
 		304CA2E4161D8E030016BFF7 /* FB2TitleInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 304CA2DB161D8E030016BFF7 /* FB2TitleInfo.m */; };
-		304CA2EB161D8EAE0016BFF7 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 304CA2EA161D8EAE0016BFF7 /* libxml2.dylib */; };
 		307146651578FA4C00DD9253 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307146641578FA4C00DD9253 /* UIKit.framework */; };
 		307146671578FA4C00DD9253 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307146661578FA4C00DD9253 /* Foundation.framework */; };
 		307146691578FA4C00DD9253 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307146681578FA4C00DD9253 /* CoreGraphics.framework */; };
@@ -301,7 +300,10 @@
 		78FA714F15F77083003F104B /* NWDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA714E15F77083003F104B /* NWDataModel.m */; };
 		78FA715515F77439003F104B /* NWCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA715415F77439003F104B /* NWCategory.m */; };
 		78FA715815F79759003F104B /* NWCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA715715F79759003F104B /* NWCategories.m */; };
+		845742EA18E5CD5F00E0C11D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 304CA2EA161D8EAE0016BFF7 /* libxml2.dylib */; };
 		8497FB25166F87CE0071E229 /* BookCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8497FB24166F87CE0071E229 /* BookCardViewController.m */; };
+		84DF6C5118ED7A6700791F14 /* SGHyphenator.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84DF6C4E18ED7A6700791F14 /* SGHyphenator.bundle */; };
+		84DF6C5218ED7A6700791F14 /* SGHyphenator.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DF6C5018ED7A6700791F14 /* SGHyphenator.m */; };
 		942D18ED166795C2003FED5D /* delete_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 942D18EC166795C2003FED5D /* delete_button@2x.png */; };
 		CEEB6ACA164C40C700CDAB9D /* FB2Date.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEB6AC9164C40C400CDAB9D /* FB2Date.m */; };
 		D88F17F61701C60800B50EE3 /* ASImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 789B993816FC68430037F227 /* ASImageScrollView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -850,7 +852,12 @@
 		78FA715415F77439003F104B /* NWCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWCategory.m; sourceTree = "<group>"; };
 		78FA715615F79759003F104B /* NWCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NWCategories.h; sourceTree = "<group>"; };
 		78FA715715F79759003F104B /* NWCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWCategories.m; sourceTree = "<group>"; };
+		845742E818E5CCE300E0C11D /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		8497FB24166F87CE0071E229 /* BookCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookCardViewController.m; sourceTree = "<group>"; };
+		84DF6C4D18ED7A6700791F14 /* SGHyphenator-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SGHyphenator-Prefix.pch"; sourceTree = "<group>"; };
+		84DF6C4E18ED7A6700791F14 /* SGHyphenator.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SGHyphenator.bundle; sourceTree = "<group>"; };
+		84DF6C4F18ED7A6700791F14 /* SGHyphenator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGHyphenator.h; sourceTree = "<group>"; };
+		84DF6C5018ED7A6700791F14 /* SGHyphenator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHyphenator.m; sourceTree = "<group>"; };
 		942D18EC166795C2003FED5D /* delete_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete_button@2x.png"; sourceTree = "<group>"; };
 		CEEB6AC8164C40C200CDAB9D /* FB2Date.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FB2Date.h; sourceTree = "<group>"; };
 		CEEB6AC9164C40C400CDAB9D /* FB2Date.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FB2Date.m; sourceTree = "<group>"; };
@@ -916,11 +923,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				845742EA18E5CD5F00E0C11D /* libxml2.dylib in Frameworks */,
 				D8A5174F16E4BFF90029509A /* ImageIO.framework in Frameworks */,
 				78463B2F15E3B458008E09C8 /* libz.dylib in Frameworks */,
 				786E03B71627F07D00594AF3 /* QuartzCore.framework in Frameworks */,
 				786E03AA1627EF0400594AF3 /* OpenGLES.framework in Frameworks */,
-				304CA2EB161D8EAE0016BFF7 /* libxml2.dylib in Frameworks */,
 				7830BA06161AE0180079441D /* StoreKit.framework in Frameworks */,
 				7830BA07161AE0180079441D /* Security.framework in Frameworks */,
 				78463B3115E3B499008E09C8 /* MobileCoreServices.framework in Frameworks */,
@@ -976,6 +983,7 @@
 		307146631578FA4C00DD9253 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				845742E818E5CCE300E0C11D /* libxml2.2.dylib */,
 				D8A5174E16E4BFF90029509A /* ImageIO.framework */,
 				78463B2E15E3B458008E09C8 /* libz.dylib */,
 				304CA2EA161D8EAE0016BFF7 /* libxml2.dylib */,
@@ -1681,6 +1689,7 @@
 		788F11FB15E23FC50067A414 /* Third-party */ = {
 			isa = PBXGroup;
 			children = (
+				84DF6C4C18ED7A6700791F14 /* SGHyphenator */,
 				788501951709BE7700A02599 /* UIDeviceAddition */,
 				789B993616FC68430037F227 /* ASMediaFocusManager */,
 				D8A516F516E4B5540029509A /* PDFCoreSDK */,
@@ -1990,6 +1999,17 @@
 			name = Backgrounds;
 			sourceTree = "<group>";
 		};
+		84DF6C4C18ED7A6700791F14 /* SGHyphenator */ = {
+			isa = PBXGroup;
+			children = (
+				84DF6C4D18ED7A6700791F14 /* SGHyphenator-Prefix.pch */,
+				84DF6C4E18ED7A6700791F14 /* SGHyphenator.bundle */,
+				84DF6C4F18ED7A6700791F14 /* SGHyphenator.h */,
+				84DF6C5018ED7A6700791F14 /* SGHyphenator.m */,
+			);
+			path = SGHyphenator;
+			sourceTree = "<group>";
+		};
 		D8A516F516E4B5540029509A /* PDFCoreSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -2154,6 +2174,7 @@
 				785CFC0D162C280300DFC9C8 /* selected_cell_bg.png in Resources */,
 				785CFC0E162C280300DFC9C8 /* separator.png in Resources */,
 				785CFC11162C2B6600DFC9C8 /* red_rect_bg.png in Resources */,
+				84DF6C5118ED7A6700791F14 /* SGHyphenator.bundle in Resources */,
 				785CFC17162C359F00DFC9C8 /* MyBooksSectionCell.xib in Resources */,
 				785CFC28162C462D00DFC9C8 /* help_tab.png in Resources */,
 				785CFC29162C462D00DFC9C8 /* mybooks_tab.png in Resources */,
@@ -2319,6 +2340,7 @@
 				78D358CB163A786600117394 /* zutil.c in Sources */,
 				78D358D7163A787400117394 /* FileInZipInfo.m in Sources */,
 				78D358D8163A787400117394 /* ZipException.m in Sources */,
+				84DF6C5218ED7A6700791F14 /* SGHyphenator.m in Sources */,
 				78D358D9163A787400117394 /* ZipFile.m in Sources */,
 				78D358DA163A787400117394 /* ZipReadStream.m in Sources */,
 				78D358DB163A787400117394 /* ZipWriteStream.m in Sources */,
@@ -2624,12 +2646,13 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
-					"/usr/include/libxml2/**",
+					"$(SDKROOT)/usr/include/libxml2/**",
 				);
 				INFOPLIST_FILE = "NewspaperWorld/NewspaperWorld-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "DAB8B729-7D40-483A-BEA2-0552FB83D000";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -2654,10 +2677,11 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
-					"/usr/include/libxml2/**",
+					"$(SDKROOT)/usr/include/libxml2/**",
 				);
 				INFOPLIST_FILE = "NewspaperWorld/NewspaperWorld-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";

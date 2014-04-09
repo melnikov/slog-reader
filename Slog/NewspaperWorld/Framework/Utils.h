@@ -7,6 +7,10 @@
 
 @interface Utils : NSObject
 
++ (BOOL)isiOS7;
+
++ (BOOL)isPortrait;
+
 + (BOOL)isDeviceiPad;
 
 + (UIBarButtonItem *)createSquareNavigationBarButtonWithImage:(UIImage *)icon target:(id)target action:(SEL)action;
@@ -91,7 +95,7 @@
 
 - (NSData*) hexToBytes;
 
-- (NSArray*)divideByWhitespacesAnNewlinesWithBlock:(void (^)(NSString *wordWithDelimiter, BOOL *stop))block;
+- (NSMutableArray*)divideByWhitespacesAnNewlinesWithBlock:(void (^)(NSString *wordWithDelimiter, BOOL *stop))block;
 
 @end
 

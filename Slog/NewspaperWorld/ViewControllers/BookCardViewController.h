@@ -11,7 +11,7 @@
 @class NWBookCard;
 
 @interface BookCardViewController : BaseViewController<UIAlertViewDelegate,
-                                                       NWApiClientDelegate>
+                                                       NWApiClientDelegate, UITextViewDelegate>
 {
     IBOutlet BookItemView* _bookItemView;
          

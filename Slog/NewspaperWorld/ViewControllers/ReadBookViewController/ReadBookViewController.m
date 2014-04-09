@@ -154,6 +154,8 @@ typedef enum
     [_toolbarWithReturn release];
     [returnButton release];
 
+    [_frontFB2View2 release];
+    [_backFB2View2 release];
     [super dealloc];
 }
 
@@ -194,9 +196,42 @@ typedef enum
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if ([Utils isDeviceiPad]){
+        if ([Utils isPortrait]){
+            _frontPage2.hidden = YES;
+            _bottomPage2.hidden = YES;
+            
+            _frontFB2View2.hidden = YES;
+            _backFB2View2.hidden = YES;
+            
+            CGRect frame = _frontPage.frame;
+            _frontPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 1024 ,768);
+            _bottomPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 1024 ,768);
+            _frontFB2View2.frame = CGRectMake(frame.origin.x, frame.origin.y, 1024 ,768);
+            _backFB2View2.frame = CGRectMake(frame.origin.x, frame.origin.y, 1024 ,768);
+        }else{
+            _frontPage2.hidden = NO;
+            _bottomPage2.hidden = NO;
+            
+            _frontFB2View2.hidden = NO;
+            _backFB2View2.hidden = NO;
+            
+            CGRect frame = _frontPage.frame;
+            
+            _frontPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 512,frame.size.height);
+            _bottomPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 512,frame.size.height);
+            //_frontFB2View.frame = CGRectMake(frame.origin.x, frame.origin.y, 502,frame.size.height);
+            //_backFB2View.frame = CGRectMake(frame.origin.x, frame.origin.y, 502,frame.size.height);
+
+        }
+    }
+
+    
     [self initializeGestureRecognizers];
     [self initializeReader];
 
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveCurrentPositionInBook) name:@"didEnterBackground" object:nil];
     _bookSlider.minimumValue = 0;
 
@@ -209,6 +244,10 @@ typedef enum
 - (void)viewDidUnload
 { 
     [self deinitializeControls];
+    [_frontFB2View2 release];
+    _frontFB2View2 = nil;
+    [_backFB2View2 release];
+    _backFB2View2 = nil;
     [super viewDidUnload];
 }
 
@@ -240,8 +279,49 @@ typedef enum
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation]; 
     [self createTemporallyBookmarkForCurrentPosition];
     
+    if ([Utils isDeviceiPad]){
+        if (!UIInterfaceOrientationIsLandscape(fromInterfaceOrientation)){
+            [self updateLandscape];
+        }else{
+            [self updatePortrait];
+        }
+    }
+    
     [self generateBookPages];
     _isChangedPage = NO;
+}
+
+-(void)updateLandscape
+{
+    _frontPage2.hidden = NO;
+    _bottomPage2.hidden = NO;
+    
+    _frontFB2View2.hidden = NO;
+   _backFB2View2.hidden = NO;
+    
+    CGRect frame = _frontPage.frame;
+    CGRect frame2 = _frontFB2View2.frame;
+    
+    _frontPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 512,frame.size.height);
+    _bottomPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 512,frame.size.height);
+    
+    _frontFB2View2.frame = CGRectMake(20, 20, 472,frame2.size.height);
+    _backFB2View2.frame = CGRectMake(20, 20, 472,frame2.size.height);
+}
+
+-(void) updatePortrait
+{
+    _frontPage2.hidden = YES;
+    _bottomPage2.hidden = YES;
+    
+    _frontFB2View2.hidden = YES;
+    _backFB2View2.hidden = YES;
+    
+    CGRect frame = _frontPage.frame;
+    _frontPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 768,frame.size.height);
+    _bottomPage.frame = CGRectMake(frame.origin.x, frame.origin.y, 768,frame.size.height);
+    _frontFB2View2.frame = CGRectMake(frame.origin.x, frame.origin.y, 768,frame.size.height);
+    _backFB2View2.frame = CGRectMake(frame.origin.x, frame.origin.y, 768,frame.size.height);
 }
 
 #pragma mark Public implementation
@@ -498,6 +578,10 @@ typedef enum
     CGPoint fb2ViewPoint = [self.view convertPoint:touchPoint toView:_frontFB2View];
     if ([self detectTouchOnLink:fb2ViewPoint] == YES)
         return NO;
+    
+    CGPoint fb2ViewPoint2 = [self.view convertPoint:touchPoint toView:_frontFB2View2];
+    if ([self detectTouchOnLink:fb2ViewPoint2] == YES)
+        return NO;
 
     [self detectTouchOnImage:fb2ViewPoint];
 
@@ -608,9 +692,26 @@ typedef enum
 - (BOOL)detectTouchOnLink:(CGPoint)pt
 {
     FB2PageData* page = [_currentPagesGenerator pageAtIndex:_currentPage];
-    if (!page)
-        return NO;
+    FB2PageData* page2 = nil;
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait]){
+        page2 = [_currentPagesGenerator pageAtIndex:_currentPage+1];
+    }
+    
+    BOOL find = NO;
+    
+    if (page)
+        find = [self findLinkByPage:page andPoint:pt];
+    
+    
+    if (page2 && !find)
+        find = [self findLinkByPage:page2 andPoint:pt];
+        
+    return find;
+}
 
+-(BOOL) findLinkByPage:(FB2PageData*) page andPoint:(CGPoint)pt
+{
     for (int i = 0; i < page.links.count; i++)
     {
         FB2PageLinkItem* linkItem = (FB2PageLinkItem*)[page.links itemAtIndex:i];
@@ -630,9 +731,24 @@ typedef enum
 - (void)detectTouchOnImage:(CGPoint)pt
 {
     FB2PageData* page = [_currentPagesGenerator pageAtIndex:_currentPage];
-    if (!page)
-        return;
+    
+    FB2PageData* page2 = nil;
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait]){
+        page2 = [_currentPagesGenerator pageAtIndex:_currentPage+1];
+    }
+    
+    if (page){
+        [self findImageByPage:page andPoint:pt];
+    }
+    if (page2){
+        [self findImageByPage:page2 andPoint:pt];
+    }
 
+}
+
+-(void) findImageByPage:(FB2PageData*) page andPoint:(CGPoint)pt
+{
     for (int i = 0; i < page.items.count; i++)
     {
         FB2PageDataItem* pageItem = [page.items itemAtIndex:i];
@@ -649,11 +765,20 @@ typedef enum
             }
         }
     }
+
 }
 
 - (void)removePageImageViews
 {
     for(UIView* subView in _frontFB2View.subviews)
+    {
+        if ([subView isKindOfClass:[UIImageView class]])
+        {
+            [subView removeFromSuperview];
+        }
+    }
+    
+    for(UIView* subView in _frontFB2View2.subviews)
     {
         if ([subView isKindOfClass:[UIImageView class]])
         {
@@ -678,6 +803,13 @@ typedef enum
     NSMutableArray* imageViews = [[[NSMutableArray alloc] init] autorelease];
 
     FB2PageData* page = [_currentPagesGenerator pageAtIndex:_currentPage];
+    
+    FB2PageData* page2 = nil;
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait]){
+        page2 = [_currentPagesGenerator pageAtIndex:_currentPage+1];
+    }
+    
     if (page)
     {
         for (int i = 0; i < page.items.count; i++)
@@ -698,6 +830,28 @@ typedef enum
             }
         }
     }
+    
+    if (page2)
+    {
+        for (int i = 0; i < page2.items.count; i++)
+        {
+            FB2PageDataItem* pageItem = [page2.items itemAtIndex:i];
+            if ([pageItem isKindOfClass:[FB2PageImageItem class]])
+            {
+                FB2PageImageItem* imageItem = (FB2PageImageItem*)pageItem;
+                if (imageItem.canZoom)
+                {
+                    UIImageView* imageView = [[[UIImageView alloc] initWithImage:imageItem.originalImage] autorelease];
+                    [imageView setFrame:imageItem.frame];
+                    [imageView setTag:imageItem.fb2ItemID];
+                    
+                    [_frontFB2View2 addSubview:imageView];
+                    [imageViews addObject:imageView];
+                }
+            }
+        }
+    }
+    
     [self.focusManager installOnViews:imageViews];
 }
 
@@ -711,6 +865,18 @@ typedef enum
             [imageViews addObject:subView];
         }
     }
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait])
+    {
+        for(UIView* subView in _frontFB2View2.subviews)
+        {
+            if ([subView isKindOfClass:[UIImageView class]])
+            {
+                [imageViews addObject:subView];
+            }
+        }
+    }
+    
     [self.focusManager installOnViews:imageViews];
 }
 
@@ -720,23 +886,35 @@ typedef enum
         return;
 
     FB2PageData* page = [_currentPagesGenerator pageAtIndex:_currentPage];
-    if (page)
+    FB2PageData* page2 = nil;
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait])
     {
-        FB2PageDataItem* item = [page.items itemWithID:_touchedImageID];
-        if (item)
-        {
-            if ([item isKindOfClass:[FB2PageImageItem class]])
-            {
-                FB2PageImageItem* imageItem = (FB2PageImageItem*)item;
-                if (imageItem)
-                {
-                    
-                    [self zoomImage:imageItem.originalImage fromRect:imageItem.frame];
+       page2 = [_currentPagesGenerator pageAtIndex:_currentPage+1];
+    }
+    
+    if (page)  [self zoomInTouchByPage:page];
+    if (page2) [self zoomInTouchByPage:page2];
+    
+}
 
-                }
+-(void) zoomInTouchByPage:(FB2PageData*) page
+{
+    FB2PageDataItem* item = [page.items itemWithID:_touchedImageID];
+    if (item)
+    {
+        if ([item isKindOfClass:[FB2PageImageItem class]])
+        {
+            FB2PageImageItem* imageItem = (FB2PageImageItem*)item;
+            if (imageItem)
+            {
+                
+                [self zoomImage:imageItem.originalImage fromRect:imageItem.frame];
+                
             }
         }
     }
+
 }
 
 - (void)initializeGestureRecognizers
@@ -853,6 +1031,11 @@ typedef enum
     [_frontFB2View setBackgroundColor:[UIColor clearColor]];
     [_backFB2View setBackgroundColor:[UIColor clearColor]];
     
+    if ([Utils isDeviceiPad]){
+        [_frontFB2View2 setBackgroundColor:[UIColor clearColor]];
+        [_backFB2View2 setBackgroundColor:[UIColor clearColor]];
+    }
+
     _nightMode = [[NWSettings sharedSettings].readerBackgroundColor isEqual:[UIColor blackColor]];
     [self updateColors];
     
@@ -862,6 +1045,11 @@ typedef enum
 
     [_bottomPage setExclusiveTouch:YES];
     [_frontPage setExclusiveTouch:YES];    
+    
+    if ([Utils isDeviceiPad]){
+        [_bottomPage2 setExclusiveTouch:YES];
+        [_frontPage2 setExclusiveTouch:YES];
+    }
     
     [self performSelectorInBackground:@selector(openBook) withObject:nil];
 }
@@ -930,12 +1118,22 @@ typedef enum
     if (command == MP_NEXT_PAGE)
     {
         if (self.currentPage < _bookSlider.maximumValue)
-            self.currentPage += 1;
+        {
+            if([Utils isDeviceiPad] && ![Utils isPortrait])
+                self.currentPage += 2;
+            else
+                self.currentPage += 1;
+            
+        }
     }
     else if (command == MP_PREV_PAGE)
     {
-        if (self.currentPage > 0)
-            self.currentPage -= 1;
+        if (self.currentPage > 0){
+            if([Utils isDeviceiPad] && ![Utils isPortrait])
+                self.currentPage -= 2;
+            else
+                self.currentPage -= 1;
+        }
     }
 }
 
@@ -1102,6 +1300,14 @@ typedef enum
     [_frontFB2View setNeedsDisplay];
     [_backFB2View setNeedsDisplay];
     
+    if([Utils isDeviceiPad] && ![Utils isPortrait])
+    {
+        _frontFB2View2.currentPage = self.currentPage+1;
+        _backFB2View2.currentPage = self.currentPage+1;
+        [_frontFB2View2 setNeedsDisplay];
+        [_backFB2View2 setNeedsDisplay];
+    }
+    
     [_bookSlider setValue:self.currentPage];
     
     double percentLabel = (_currentPagesGenerator.pagesCount == 1) ? 100.0 : ((double)(self.currentPage)/((double)(_currentPagesGenerator.pagesCount - 1))*100);
@@ -1130,12 +1336,28 @@ typedef enum
 
 - (void)updateColors
 {
+    [self.view setBackgroundColor:[NWSettings sharedSettings].readerBackgroundColor];
+    
     [_frontPage setBackgroundColor:[NWSettings sharedSettings].readerBackgroundColor];
     [_bottomPage setBackgroundColor:[NWSettings sharedSettings].readerBackgroundColor];
+    
+    if([Utils isDeviceiPad])
+    {
+        [_frontPage2 setBackgroundColor:[NWSettings sharedSettings].readerBackgroundColor];
+        [_bottomPage2 setBackgroundColor:[NWSettings sharedSettings].readerBackgroundColor];
+    }
+  
+    
     _percentReader.textColor = [NWSettings sharedSettings].readerTextColor;
     
     [_frontFB2View setNeedsDisplay];
     [_backFB2View setNeedsDisplay];
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait])
+    {
+        [_frontFB2View2 setNeedsDisplay];
+        [_backFB2View2 setNeedsDisplay];
+    }
 }
 
 - (void)showPanels
@@ -1270,6 +1492,12 @@ typedef enum
     [_frontFB2View initializeWithPageGenerator:_currentPagesGenerator];
     [_backFB2View initializeWithPageGenerator:_currentPagesGenerator];
     
+    if([Utils isDeviceiPad]){
+        [_frontFB2View2 initializeWithPageGenerator:_currentPagesGenerator];
+        [_backFB2View2 initializeWithPageGenerator:_currentPagesGenerator];
+    }
+    
+    
     if (_currentPagesGenerator.pagesCount == 0 && !_currentPagesGenerator.generatingPages)
     {
         if (![SVProgressHUD isVisible])
@@ -1305,6 +1533,11 @@ typedef enum
     _bookSlider.userInteractionEnabled = YES;
     [_frontFB2View initializeWithPageGenerator:_currentPagesGenerator];
     [_backFB2View initializeWithPageGenerator:_currentPagesGenerator];
+    
+    if([Utils isDeviceiPad] && ![Utils isPortrait]){
+        [_frontFB2View2 initializeWithPageGenerator:_currentPagesGenerator];
+        [_backFB2View2 initializeWithPageGenerator:_currentPagesGenerator];
+    }
 
     //if first run
     if (_isFirstRun && (_bookCacheItem.positionBookmark)) {
@@ -1520,6 +1753,19 @@ typedef enum
             }
         }
     }
+    
+    for(UIView* subView in _frontFB2View2.subviews)
+    {
+        if ([subView isKindOfClass:[UIImageView class]])
+        {
+            if (subView.tag == view.tag)
+            {
+                
+                return [_frontFB2View2 convertRect:subView.frame toView:_frontFB2View2.superview];
+            }
+        }
+    }
+    
     return CGRectZero;
 }
 

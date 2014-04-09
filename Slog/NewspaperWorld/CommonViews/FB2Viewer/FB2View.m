@@ -616,6 +616,8 @@ static const BOOL draw_spc = NO; // if YES should draw whitespaces
     CGContextSetStrokeColorWithColor(context, textColor.CGColor);
 
     NSString* textBlock = (NSString*)textItem.data;
+    
+    //textBlock = [textBlock hyphenatedStringWithLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru"]];
     [textBlock MTDrawInRect:textItem.frame
                    withFont:textItem.textStyle.textFont
               lineBreakMode:NSLineBreakByWordWrapping
@@ -639,6 +641,8 @@ static const BOOL draw_spc = NO; // if YES should draw whitespaces
 
     CGFloat x = rect.origin.x;
     CGFloat y = rect.origin.y + rect.size.height/2 + rect.size.height*0.1;
+    
+    //txt = [txt hyphenatedStringWithLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru"]];
     
     [txt MTDrawInRect:rect
                       withFont:style.textFont
@@ -673,8 +677,11 @@ static const BOOL draw_spc = NO; // if YES should draw whitespaces
     for (int j = 0; j < stringsArray.count; j++)
     {
         stringToDraw = [stringsArray objectAtIndex:j];
+        //stringToDraw = [stringToDraw hyphenatedStringWithLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru"]];
+        
         if (![[stringToDraw stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""])
         {
+            
             stringSize = [stringToDraw MTSizeWithFont:textItem.textStyle.textFont
                                              forWidth:textItem.frame.size.width
                                         lineBreakMode:NSLineBreakByCharWrapping];
@@ -686,6 +693,7 @@ static const BOOL draw_spc = NO; // if YES should draw whitespaces
             CGFloat x = textItem.frame.origin.x;
             CGFloat y = curRect.origin.y + stringSize.height/2 + stringSize.height*0.1;
 
+            
             [stringToDraw MTDrawInRect:curRect
                               withFont:textItem.textStyle.textFont
                          lineBreakMode:NSLineBreakByWordWrapping

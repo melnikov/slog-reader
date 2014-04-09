@@ -11,6 +11,7 @@
 #import "FB2PageTextItem.h"
 #import "NSString+MultiThreadDraw.h"
 #import "Utils.h"
+#import "AppDelegate.h"
 
 static NSObject* _lockObject = nil;
 
@@ -27,6 +28,7 @@ static void release_lockObject()
                                 textStyle:(FB2TextStyle*)textStyle
                                   context:(FB2PageGeneratorContext *)context
 {
+    
     UIFont* currentReaderFont = textStyle.textFont;
     CGSize  pageSize = CGSizeMake(context.pageWidth, context.pageHeight);
     CGFloat lineHeight = currentReaderFont.lineHeight;
@@ -51,6 +53,12 @@ static void release_lockObject()
         //Перечислим слова
         [textBlock divideByWhitespacesAnNewlinesWithBlock:^(NSString *wordWithDelimiter, BOOL *stop)
         {
+            
+            
+            if ([wordWithDelimiter rangeOfString:@"гигантские"].length > 0){
+                
+                NSLog(@"");
+            }
             parsed = YES;
             // строка с учетом нового слова
             NSString* newStr = [currentLineTextBlock stringByAppendingString:[NSString stringWithString:wordWithDelimiter]];
@@ -59,6 +67,7 @@ static void release_lockObject()
             CGSize newStrSize =  [self sizeForTextBlock:[newStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
                                            withFont:currentReaderFont
                                            pageSize:textLimitSize];
+            
             //Длина текущей строки
             currentLineSize =  [self sizeForTextBlock:currentLineTextBlock withFont:currentReaderFont pageSize:textLimitSize];
             if (context.page.contentHeight + lineHeight > context.pageHeight)
@@ -68,23 +77,121 @@ static void release_lockObject()
             }
             else
             if (context.position->x + newStrSize.width >= pageSize.width)
-            {
-                [self addItemWithData:[NSString stringWithString:currentLineTextBlock]
-                            frame:CGRectMake(context.position->x,context.position->y, currentLineSize.width, currentLineSize.height)
-                        fb2ItemID:ID
-                            style:textStyle
-                          context:context];
-            
-                [self nextStringWithLineHeight:lineHeight context:context];
+            { //!!!!!!!
+                BOOL isHypher = NO;
                 
-                if (!context.page)
+                NSCharacterSet *charset = [NSCharacterSet whitespaceCharacterSet];
+                NSString* clearString = [wordWithDelimiter stringByTrimmingCharactersInSet:charset];
+                
+                charset = [NSCharacterSet characterSetWithCharactersInString:@",. \"!"];
+                clearString = [clearString stringByTrimmingCharactersInSet:charset];
+                
+                
+                NSArray* hyp = [[AppDelegate sharedAppDelegate].hyphenator  hyphenate:clearString];
+                
+                NSString* lastS = @"";
+                
+                for (int i=0; i<hyp.count; i++) {
+                    NSString* s = [NSString stringWithFormat:@"%@%@",lastS,hyp[i] ];
+                    //NSLog(@"slog = %@",s);
+                    
+                    CGSize sSize =  [self sizeForTextBlock:[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                                       withFont:currentReaderFont
+                                                       pageSize:textLimitSize];
+                    
+                    CGSize sSizeZnak =  [self sizeForTextBlock:@"-"
+                                                  withFont:currentReaderFont
+                                                  pageSize:textLimitSize];
+                    
+                    if ((context.position->x + currentLineSize.width + sSize.width + sSizeZnak.width) >= pageSize.width){
+                        isHypher = YES;
+                        break;
+                    }
+                    
+                    //lastS = [NSString stringWithString:s];
+                    lastS = [NSString stringWithFormat:@"%@",s];
+                    
+                }
+                
+                if ((clearString.length - lastS.length)<2)
                 {
-                    *stop = YES;
+                    //одну букву не переносим
+                    isHypher = NO;
+                }
+                
+                
+                if(isHypher && lastS.length>1 && (lastS.length<clearString.length))
+                {
+                   NSString *addedStr = [NSString stringWithString:lastS];
+                    if (![addedStr hasSuffix:@"-"]){
+                        addedStr = [NSString stringWithFormat:@"%@-",lastS];
+                    }
+                 
+                   NSString* newStr2 = [currentLineTextBlock stringByAppendingString:addedStr];
+                    
+                    CGSize  newStrSize2 =  [self sizeForTextBlock:newStr2
+                                                       withFont:currentReaderFont
+                                                       pageSize:textLimitSize];
+                    
+                    
+                    [self addItemWithData:[NSString stringWithString:newStr2]
+                                    frame:CGRectMake(context.position->x,context.position->y, newStrSize2.width, newStrSize2.height)
+                                fb2ItemID:ID
+                                    style:textStyle
+                                  context:context];
+                    
+                    [self nextStringWithLineHeight:lineHeight context:context];
+                    
+                    
+                    
+                    if (!context.page)
+                    {
+                        
+                        NSString *splitedWord = wordWithDelimiter;
+                        if (lastS.length > 1){
+                            splitedWord = [[wordWithDelimiter substringToIndex:[wordWithDelimiter length]] substringFromIndex:lastS.length];
+                            [nextPageTextBlock deleteCharactersInRange:NSMakeRange(0, lastS.length)];
+                        }
+                        
+                        *stop = YES;
+                        
+                    }
+                    else
+                    {
+                        //NSString* splitedWord = wordWithDelimiter;
+                        NSString *splitedWord = wordWithDelimiter;
+                        if (lastS.length > 1){
+                            splitedWord = [[wordWithDelimiter substringToIndex:[wordWithDelimiter length]] substringFromIndex:lastS.length];
+                            [currentLineTextBlock setString:[NSString stringWithString:splitedWord]];
+                            [nextPageTextBlock deleteCharactersInRange:NSMakeRange(0, wordWithDelimiter.length)];
+                        }else{
+                            [currentLineTextBlock setString:[NSString stringWithString:wordWithDelimiter]];
+                            [nextPageTextBlock deleteCharactersInRange:NSMakeRange(0, wordWithDelimiter.length)];
+                        }
+    
+                    }
+
                 }
                 else
                 {
-                    [currentLineTextBlock setString:[NSString stringWithString:wordWithDelimiter]];
-                    [nextPageTextBlock deleteCharactersInRange:NSMakeRange(0, wordWithDelimiter.length)];
+                    [self addItemWithData:[NSString stringWithString:currentLineTextBlock]
+                                    frame:CGRectMake(context.position->x,context.position->y, currentLineSize.width, currentLineSize.height)
+                                fb2ItemID:ID
+                                    style:textStyle
+                                  context:context];
+                    
+                    [self nextStringWithLineHeight:lineHeight context:context];
+                    
+                    if (!context.page)
+                    {
+                        *stop = YES;
+                    }
+                    else
+                    {
+                        [currentLineTextBlock setString:[NSString stringWithString:wordWithDelimiter]];
+                        [nextPageTextBlock deleteCharactersInRange:NSMakeRange(0, wordWithDelimiter.length)];
+                    }
+
                 }
             }
             else
