@@ -65,6 +65,11 @@
 
 - (void)layoutSubviews
 {
+	if(self.bookCoverViewMirror && CGAffineTransformEqualToTransform(self.bookCoverViewMirror.transform, CGAffineTransformIdentity))
+	{
+		self.bookCoverViewMirror.transform = CGAffineTransformMakeScale(1.0, -1.0);//CGAffineTransformRotate(self.bookCoverViewMirror.transform, 3.14);
+	}
+	
     [self autosizeLabel:_bookAuthorsView];
     [self autosizeLabel:_bookTitleView];
     [self autosizeLabel:_bookDurationView];
@@ -94,13 +99,14 @@
 
 - (void)autosizeLabel:(UILabel*)label
 {
-    float lineHeight = label.font.pointSize + 2;
+    //float lineHeight = label.font.pointSize + 2;
     CGSize labelSize = [label.text sizeWithFont:label.font
-                              constrainedToSize:CGSizeMake(label.frame.size.width, 2*lineHeight)
+                              constrainedToSize:CGSizeMake(label.frame.size.width, 34/*2*lineHeight*/)
                                   lineBreakMode:NSLineBreakByWordWrapping];
     CGRect oldFrame = label.frame;
-    oldFrame.size.height = (labelSize.height > 2*lineHeight) ? 2*lineHeight : labelSize.height;
+    oldFrame.size.height = (labelSize.height > 34/*2*lineHeight*/) ? 34/*2*lineHeight*/ : labelSize.height;
     [label setFrame:oldFrame];
+	
     label.lineBreakMode = UILineBreakModeTailTruncation;
 }
 
@@ -109,18 +115,18 @@
     CGRect prevFrame = _bookCoverView.frame;
     CGRect curFrame = _bookAuthorsView.frame;
    
-    curFrame.origin.y = prevFrame.origin.y;
+    curFrame.origin.y = prevFrame.origin.y - curFrame.size.height - 8;
     [_bookAuthorsView setFrame:curFrame];
 
     prevFrame = _bookAuthorsView.frame;
     curFrame = _bookTitleView.frame;
-    curFrame.origin.y = prevFrame.origin.y + prevFrame.size.height;
+    curFrame.origin.y = prevFrame.origin.y - curFrame.size.height - 8;
     [_bookTitleView setFrame:curFrame];
 
-    prevFrame = _bookTitleView.frame;
-    curFrame = _bookDurationView.frame;
-    curFrame.origin.y = prevFrame.origin.y + prevFrame.size.height;
-    [_bookDurationView setFrame:curFrame];
+//    prevFrame = _bookTitleView.frame;
+//    curFrame = _bookDurationView.frame;
+//    curFrame.origin.y = prevFrame.origin.y + prevFrame.size.height;
+//    [_bookDurationView setFrame:curFrame];
 }
 
 #pragma mark Property accessors
@@ -167,6 +173,12 @@
    
     if (item.image) {
         [_bookCoverView setImage:item.image];
+		
+		if(self.bookCoverViewMirror)
+		{
+			self.bookCoverViewMirror.image = [self maskImage:item.image withMask:[UIImage imageNamed:@"mask_item.png"]];
+		}
+		
     } else {
         [_bookCoverView setImageWithURLRequest:[NSURLRequest requestWithURL:coverURL] placeholderImage:[UIImage imageNamed:@"default_item.png"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
 
@@ -175,10 +187,38 @@
 
             if (item_tmp) {
                 item_tmp.image = _bookCoverView.image;
+				
+				if(self.bookCoverViewMirror)
+				{
+					self.bookCoverViewMirror.image = [self maskImage:item_tmp.image withMask:[UIImage imageNamed:@"mask_item.png"]];
+				}
             }
+			else
+			{
+				if(self.bookCoverViewMirror)
+				{
+					self.bookCoverViewMirror.image = [self maskImage:_bookCoverView.image withMask:[UIImage imageNamed:@"mask_item.png"]];
+				}
+			}
         } failure:nil];
     }
     [self updateLabelsLayout];
+}
+
+- (UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage {
+	
+    CGImageRef maskRef = maskImage.CGImage;
+	
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+										CGImageGetHeight(maskRef),
+										CGImageGetBitsPerComponent(maskRef),
+										CGImageGetBitsPerPixel(maskRef),
+										CGImageGetBytesPerRow(maskRef),
+										CGImageGetDataProvider(maskRef), NULL, false);
+	
+    CGImageRef masked = CGImageCreateWithMask([image CGImage], mask);
+    return [UIImage imageWithCGImage:masked];
+	
 }
 
 - (void)setBookDuration:(NSString*)newDuration

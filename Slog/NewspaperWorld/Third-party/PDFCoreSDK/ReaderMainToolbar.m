@@ -74,7 +74,7 @@
 
         UILabel* tLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width/2, self.bounds.size.height)];
         tLabel.backgroundColor = [UIColor clearColor];
-        tLabel.textColor = [UIColor whiteColor];
+        tLabel.textColor = RGB(136, 24, 17);
         tLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         tLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         tLabel.textAlignment = UITextAlignmentCenter;
@@ -82,11 +82,13 @@
         _titleView = [[UIBarButtonItem alloc] initWithCustomView:tLabel];
         UIBarButtonItem *flexibleSpaceLeft2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         
-        UIImage* bookMarkImg = [UIImage imageNamed:@"add_bookmark"];
+        UIImage* bookMarkImg = [UIImage imageNamed:@"bookMark.png"];
         UIBarButtonItem *flagButton = [[UIBarButtonItem alloc] initWithImage:bookMarkImg style:UIBarButtonItemStylePlain target:self action:@selector(markButtonTapped:)];
+		flagButton.tintColor = RGB(136, 24, 17);
         
         UIImage* thumbsImg = [UIImage imageNamed:@"Reader-Thumbs"];
         UIBarButtonItem *thumbsButton = [[UIBarButtonItem alloc] initWithImage:thumbsImg style:UIBarButtonItemStylePlain target:self action:@selector(thumbsButtonTapped:)];
+		thumbsButton.tintColor = RGB(136, 24, 17);
         
         _buttons = [NSArray arrayWithObjects:flexibleSpaceLeft1, _titleView, flexibleSpaceLeft2, thumbsButton, flagButton, nil];
         [self setItems:_buttons];

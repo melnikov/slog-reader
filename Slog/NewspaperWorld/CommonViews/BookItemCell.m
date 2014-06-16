@@ -67,7 +67,11 @@
 
 - (void)setBackgroundImage:(UIImage *)newImage
 {
-    self.backgroundView = [[[UIImageView alloc] initWithImage:newImage highlightedImage:newImage] autorelease];
+    //self.backgroundView = [[[UIImageView alloc] initWithImage:newImage highlightedImage:newImage] autorelease];
+	
+	self.backgroundView = [[UIImageView new] autorelease];
+	
+	self.backgroundColor = [UIColor clearColor];
 }
 
 - (UIImage*)backgroundImage
@@ -92,8 +96,8 @@
 
 + (int)cellHeight
 {
-    static const int iPhoneCellHeight = 128;
-    static const int iPadCellHeight = 134;
+    static const int iPhoneCellHeight = 320;
+    static const int iPadCellHeight = 360;
     
     if ([Utils isDeviceiPad])
         return iPadCellHeight;

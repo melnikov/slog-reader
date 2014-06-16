@@ -214,7 +214,7 @@
 
 - (int)count
 {
-    return [_cacheItems count];
+    return (int)[_cacheItems count];
 }
 
 @end

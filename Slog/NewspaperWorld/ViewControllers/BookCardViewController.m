@@ -59,7 +59,8 @@
 {
     [super viewDidLoad];
     [self reloadBookCard];
-    
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -175,7 +176,7 @@
         [_readBookButton setFrame:buttonFrame];
 
         buttonFrame = _readDemoButton.frame;
-        buttonFrame.origin.y = _bookItemView.frame.origin.y + _bookItemView.frame.size.height - buttonFrame.size.height;
+        buttonFrame.origin.y = _bookItemView.frame.origin.y + _bookItemView.frame.size.height - buttonFrame.size.height * 2 - 10;
         [_readDemoButton setFrame:buttonFrame];
 
         buttonFrame = _buyBookButton.frame;
@@ -198,7 +199,7 @@
         [_readBookButton setFrame:buttonFrame];
 
         buttonFrame = _readDemoButton.frame;
-        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height + marginiOS7;
+        buttonFrame.origin.y = _bookItemView.bookCoverView.frame.origin.y + _bookItemView.bookCoverView.frame.size.height - buttonFrame.size.height * 2 - 10 + marginiOS7;
         [_readDemoButton setFrame:buttonFrame];
 
         buttonFrame = _buyBookButton.frame;
@@ -265,7 +266,7 @@
     {
         self.navigationBarTitle = _bookCard.title;
 
-        _bookItemView.bookAuthors = _bookCard.authors;
+        _bookItemView.bookAuthors = [[_bookCard.authors componentsSeparatedByString:@","] firstObject];
         _bookItemView.bookTitle = _bookCard.title;
     
         NSMutableString* bookTechData = [NSMutableString string];
@@ -301,6 +302,7 @@
 
         [_readDemoButton setHidden:_bookCard.isSold];
         [_readBookButton setHidden:!_bookCard.isSold];
+		[_buyBookButton setHidden:_bookCard.isSold];
 
         [_bookAnnotation setText:_bookCard.bookAnnotation];
     }

@@ -47,6 +47,8 @@
     [_applicationCopyrightsLabel setText:NSLocalizedString(@"IDS_COPYRIGHT", @"")];
    
     [_applicationDescriptionView setText:_descriptionText];
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -55,7 +57,6 @@
     
     [super viewDidUnload];
 }
-
 
 #pragma mark Public methods
 

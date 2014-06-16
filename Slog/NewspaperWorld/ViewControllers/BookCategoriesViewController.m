@@ -83,7 +83,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+	
     [self createEmptyListLabel];
     [self createActivityIndicator];
     
@@ -96,12 +96,17 @@
     [self defaultInitializeCategories];
     
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.backgroundColor = [UIColor colorWithR:249 G:241 B:194 A:255];
+    _tableView.backgroundColor = [UIColor clearColor];//[UIColor colorWithR:249 G:241 B:194 A:255];
     [Utils setEmptyFooterToTable:_tableView];
     
     [_tableView reloadData];
     
     [[super view] setNeedsDisplay];
+	
+	if([Utils isDeviceiPad])
+		background.image = [UIImage imageNamed:@"background_menu.jpg"];
+	else
+		background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -114,7 +119,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+	
     if (_categories.count == 0)
     {
         [self performGetCategoriesRequest];
@@ -131,8 +136,8 @@
     
 
     NWCategory* category = nil;
-    if (indexPath.section == RECOMMENDED_SECTION_ID) category = [self.specialCategories categoryAtIndex:indexPath.row];
-    if (indexPath.section == GENRES_SECTION_ID)      category = [self.genres categoryAtIndex:indexPath.row];
+    if (indexPath.section == RECOMMENDED_SECTION_ID) category = [self.specialCategories categoryAtIndex:(int)indexPath.row];
+    if (indexPath.section == GENRES_SECTION_ID)      category = [self.genres categoryAtIndex:(int)indexPath.row];
     
     if (cell)
     {
@@ -161,33 +166,42 @@
 
 #pragma mark TableViewDelegate Protocol
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	cell.backgroundColor = [UIColor clearColor];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_needShowSections == NO)
-        return 0;
-    
-    const int defaultSectionHeaderHeight = 21;
-    int categoryCount = 0;
-    if (section == RECOMMENDED_SECTION_ID) categoryCount = [self.specialCategories  count];
-    if (section == GENRES_SECTION_ID)      categoryCount = [self.genres count];
-  
-    return (categoryCount == 0) ? 0 : defaultSectionHeaderHeight;
+//    if (_needShowSections == NO)
+//        return 0;
+//    
+//    const int defaultSectionHeaderHeight = 21;
+//    int categoryCount = 0;
+//    if (section == RECOMMENDED_SECTION_ID) categoryCount = [self.specialCategories  count];
+//    if (section == GENRES_SECTION_ID)      categoryCount = [self.genres count];
+//  
+//    return (categoryCount == 0) ? 0 : defaultSectionHeaderHeight;
+	
+	return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_needShowSections == NO)
-        return nil;
-    SectionHeaderView* sectionView = [self sectionHeader];
-    sectionView.title = [_sectionTitles objectAtIndex:section];
-    return sectionView;
+//    if (_needShowSections == NO)
+//        return nil;
+//    SectionHeaderView* sectionView = [self sectionHeader];
+//    sectionView.title = [_sectionTitles objectAtIndex:section];
+//    return sectionView;
+	
+	return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NWCategory* category = nil;
-    if (indexPath.section == RECOMMENDED_SECTION_ID) category = [self.specialCategories  categoryAtIndex:indexPath.row];
-    if (indexPath.section == GENRES_SECTION_ID)      category = [self.genres categoryAtIndex:indexPath.row];
+    if (indexPath.section == RECOMMENDED_SECTION_ID) category = [self.specialCategories  categoryAtIndex:(int)indexPath.row];
+    if (indexPath.section == GENRES_SECTION_ID)      category = [self.genres categoryAtIndex:(int)indexPath.row];
 
     if (!category)
         return;

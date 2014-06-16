@@ -40,6 +40,8 @@
         [self createEditBarButton];
     
     self.navigationBarTitle = NSLocalizedString(@"IDS_FRAGMENTS", @"");
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,7 +73,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        NWBookCacheItem* item = [_sortedCache cacheItemAtIndex:indexPath.row];
+        NWBookCacheItem* item = [_sortedCache cacheItemAtIndex:(int)indexPath.row];
         _indexToDelete = [indexPath retain];
         [self deleteButtonOnBookItemTouchedWithBookID:item.bookCard.ID];
     }

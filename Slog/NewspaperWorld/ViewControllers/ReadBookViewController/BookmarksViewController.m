@@ -113,7 +113,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [_cacheItem.bookmarks removeBookmarkAtIndex:indexPath.row];
+        [_cacheItem.bookmarks removeBookmarkAtIndex:(int)indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         [[NWDataModel sharedModel].purchasedBooksCache save];
@@ -130,7 +130,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NWBookmarkItem* bookmark = [_cacheItem.bookmarks bookmarkAtIndex:indexPath.row];
+    NWBookmarkItem* bookmark = [_cacheItem.bookmarks bookmarkAtIndex:(int)indexPath.row];
     if (bookmark)
     {
         if ([_delegate respondsToSelector:@selector(bookmarkItemSelected:)])
@@ -165,12 +165,15 @@
 
 - (void)initializeNavigationBar
 {
-    self.navigationBarTitle = NSLocalizedString(@"IDS_BOOKMARKS", @""); 
+    self.navigationBarTitle = NSLocalizedString(@"IDS_BOOKMARKS", @"");
 
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"IDS_BACK", @"")
                                                                                   style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(backButtonTouched:)] autorelease];
+	
+	if(!IS_OS_7_OR_LATER && ![Utils isDeviceiPad])
+		self.navigationController.navigationBar.backgroundColor = RGB(242, 242, 242);
 }
 
 - (IBAction)backButtonTouched:(id)sender

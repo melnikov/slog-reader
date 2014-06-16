@@ -54,8 +54,10 @@
         self.navigationController.tabBarItem.title = NSLocalizedString(@"IDS_HELP", @"");
     }
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.backgroundColor = [UIColor colorWithR:249 G:241 B:194 A:255];
+    _tableView.backgroundColor = [UIColor clearColor];//[UIColor colorWithR:249 G:241 B:194 A:255];
     [Utils setEmptyFooterToTable:_tableView];
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -67,7 +69,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     BookCategoryCell* cell = [tableView dequeueReusableCellWithIdentifier:[BookCategoryCell reuseIdentifier]];
     if (!cell)
     {
@@ -76,7 +77,7 @@
     if (cell)
     {
         cell.showBottomSeparator = (indexPath.row == [_helpCategoriesTitles count] - 1);
-        cell.title = [self titleAtIndex:indexPath.row];
+        cell.title = [self titleAtIndex:(int)indexPath.row];
     }
     return cell;
 }
@@ -93,6 +94,10 @@
 
 #pragma mark Table implementation
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	cell.backgroundColor = [UIColor clearColor];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -100,13 +105,13 @@
     if (indexPath.row == [_helpCategoriesTitles count] - 1)
     {
         AboutViewController* about = [AboutViewController createViewController];
-        if ([about initializeWithDescription:[self textAtIndex:indexPath.row]])
+        if ([about initializeWithDescription:[self textAtIndex:(int)indexPath.row]])
             [self.navigationController pushViewController:about animated:YES];
     }
     else
     {
-        [self.navigationController pushViewController:[InformationViewController informationWithTitle:[self titleAtIndex:indexPath.row]
-                                                                                                 text:[self textAtIndex:indexPath.row]] animated:YES];        
+        [self.navigationController pushViewController:[InformationViewController informationWithTitle:[self titleAtIndex:(int)indexPath.row]
+                                                                                                 text:[self textAtIndex:(int)indexPath.row]] animated:YES];
     }
 }
 

@@ -6,7 +6,7 @@
 
 #import "ExpandableView.h"
 
-const static int defaultButtonHeight = 38;
+const static int defaultButtonHeight = 60;
 
 @interface  ExpandableView()
 
@@ -107,25 +107,33 @@ const static int defaultButtonHeight = 38;
         _expandButton = [[UIButton alloc] init];
         [self addSubview:_expandButton];
     }
-    [_expandButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_expandButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
-    [_expandButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+	
+	//_expandButton.titleLabel.font = [UIFont systemFontOfSize:20];
+	
+	_expandButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+	_expandButton.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	
+    [_expandButton setTitleColor:RGB(180, 6, 16) forState:UIControlStateNormal];
+    [_expandButton setTitleColor:RGB(180, 6, 16) forState:UIControlStateHighlighted];
+    [_expandButton setTitleColor:RGB(180, 6, 16) forState:UIControlStateSelected];
     
     
     [_expandButton removeTarget:self action:@selector(expandTouched:) forControlEvents:UIControlEventTouchUpInside];
     [_expandButton addTarget:self action:@selector(expandTouched:) forControlEvents:UIControlEventTouchUpInside];
-    [_expandButton setFrame:CGRectMake(0, 0, self.bounds.size.width, _expandButtonHeight)];
+    [_expandButton setFrame:CGRectMake(40, 0, _expandButton.frame.size.width, _expandButtonHeight)];
        
     [self updateIndicator];
 }
 
 - (void)setButtonBackgroundImage:(UIImage*)image forState:(UIControlState)state
 {
-    [_expandButton setBackgroundImage:image forState:state];    
+    //[_expandButton setBackgroundImage:image forState:state];
 }
 
 - (void)setButtonTitle:(NSString*)text
 {
+	text = [text uppercaseString];
+	
     [_expandButton setTitle:text forState:UIControlStateNormal];
     [_expandButton setTitle:text forState:UIControlStateSelected];
     [_expandButton setTitle:text forState:UIControlStateHighlighted];    
@@ -189,7 +197,7 @@ const static int defaultButtonHeight = 38;
     [self setFrame:newFrame];
     if (_expandButton)
     {
-        [_expandButton setFrame:CGRectMake(0, 0, self.bounds.size.width, _expandButtonHeight)];
+        [_expandButton setFrame:CGRectMake(40, 0, _expandButton.frame.size.width, _expandButtonHeight)];
         [_expandButton setSelected:_isExpanded];
     }
     if (_child)
@@ -200,9 +208,9 @@ const static int defaultButtonHeight = 38;
 
 - (void)updateIndicator
 {
-    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateNormal];
-    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateHighlighted];
-    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateSelected];
+//    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateNormal];
+//    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateHighlighted];
+//    [_expandButton setBackgroundImage:_isExpanded ? _rollupImage: _expandImage  forState:UIControlStateSelected];
 }
 
 #pragma mark Public methods

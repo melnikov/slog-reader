@@ -45,6 +45,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                            target:self
                                                                                            action:@selector(rightButtonTouched:)];
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewWillAppear:(BOOL)animated

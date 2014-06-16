@@ -8,7 +8,7 @@
 
 
 #define EXPAND_ANIMATION_DELAY 0.001
-#define EXPAND_ANIMATION_DURATION 0.5
+#define EXPAND_ANIMATION_DURATION 0.3
 
 @class ExpandableView;
 @protocol ExpandableViewDelegate

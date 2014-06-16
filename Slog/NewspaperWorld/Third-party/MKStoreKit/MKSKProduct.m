@@ -97,7 +97,7 @@ static NSMutableData *sDataFromConnection;
         
         NSString *postData = [NSString stringWithFormat:@"productid=%@&udid=%@", productId, uniqueID];
         
-        NSString *length = [NSString stringWithFormat:@"%d", [postData length]];	
+        NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
         [theRequest setValue:length forHTTPHeaderField:@"Content-Length"];	
         
         [theRequest setHTTPBody:[postData dataUsingEncoding:NSASCIIStringEncoding]];
@@ -134,7 +134,7 @@ static NSMutableData *sDataFromConnection;
     if (self.bookID != -1)
         postData = [postData stringByAppendingFormat:@"&book_id=%d",    self.bookID];
 	
-	NSString *length = [NSString stringWithFormat:@"%d", [postData length]];	
+	NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];	
 	[theRequest setValue:length forHTTPHeaderField:@"Content-Length"];	
 	
 	[theRequest setHTTPBody:[postData dataUsingEncoding:NSASCIIStringEncoding]];

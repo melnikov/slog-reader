@@ -123,9 +123,9 @@ static void singleton_remover()
                                         _token,     NWApiRequestParameterToken,
                                         language,   NWApiRequestParameterLanguage, nil];
 #warning iOS7 need fix
-    if ([Utils isiOS7]){
-        parameters = nil;
-    }
+//    if ([Utils isiOS7]){
+//        parameters = nil;
+//    }
  
     
     [self invokeMethodNamed:NWApiMethodGetCategories parameters:parameters delegate:delegate];
@@ -403,7 +403,7 @@ static void singleton_remover()
     id result = [parser objectWithString:jsonString error:&error];
     if (error)
     {
-        NSLog(@"json error: %d %@", error.code, [error.userInfo objectForKey:NSLocalizedDescriptionKey]);
+        NSLog(@"json error: %ld %@", (long)error.code, [error.userInfo objectForKey:NSLocalizedDescriptionKey]);
         if ( [delegate respondsToSelector:@selector(apiClientDidFailedExecuteMethod:error:)])
         {
             error = [NSError errorWithDomain:NWApiErrorDomainFormat

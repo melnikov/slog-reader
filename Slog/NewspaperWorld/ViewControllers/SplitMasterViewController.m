@@ -58,6 +58,8 @@ const static int myBooksCellRow     = 2;
     [_storeBackgroundView release];  _storeBackgroundView = nil;
     [_myBooksBackgroundView release]; _myBooksBackgroundView = nil;
 
+	[searchView release];
+	[searchTextField release];
     [super dealloc];
 }
 
@@ -66,7 +68,7 @@ const static int myBooksCellRow     = 2;
     if (!_categories)
     {
         _needShowSections = NO;
-        [self initializeWithCategories:[NWDataModel sharedModel].categories title:NSLocalizedString(@"IDS_BOOKSTORE_TAB_TITLE", @"")];
+        [self initializeWithCategories:[NWDataModel sharedModel].categories title:nil/*NSLocalizedString(@"IDS_BOOKSTORE_TAB_TITLE", @"")*/];
     }
 }
 
@@ -93,7 +95,9 @@ const static int myBooksCellRow     = 2;
     
     UIImage* logoImage = [UIImage imageNamed:@"logo"];
     UIImageView* logoImageView = [[UIImageView alloc] initWithImage:logoImage];
-    self.navigationItem.titleView = logoImageView;
+    self.navigationItem.titleView = nil;
+	
+	//self.navigationItem.titleView.frame = CGRectMake(0, 0, 309, 200);
     [logoImageView release];
     
     self.contentSizeForViewInPopover = CGSizeMake(320.0, 300.0);
@@ -106,15 +110,23 @@ const static int myBooksCellRow     = 2;
 //    _myBooksBackgroundView.frame = CGRectMake(frame.origin.x, frame.origin.y+40, frame.size.width, frame.size.height);
     
     _yOrigin = _storeBackgroundView.frame.origin.y;
+	
+	background.image = [UIImage imageNamed:@"background_menu.jpg"];
 }
 
 - (void)viewDidUnload
 {
+	[searchView release];
+	searchView = nil;
+	[searchTextField release];
+	searchTextField = nil;
     [super viewDidUnload];
     [_bottomView release];           _bottomView = nil;
     [_myBooksTable release];         _myBooksTable = nil;
     [_storeBackgroundView release];  _storeBackgroundView = nil;
-    [_myBooksBackgroundView release]; _myBooksBackgroundView = nil;    
+    [_myBooksBackgroundView release]; _myBooksBackgroundView = nil;
+	
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -129,8 +141,6 @@ const static int myBooksCellRow     = 2;
     //extra check and correction lack of navigation bar shift after splash screen rotation
     if (self.navigationController.navigationBar.frame.origin.y > 0)
     {
-        
-        
         if ([Utils isiOS7]){
             //CGRect navFrame = self.navigationController.navigationBar.frame;
             //self.navigationController.navigationBar.frame = CGRectMake(navFrame.origin.x,0.0f, navFrame.size.width,navFrame.size.height);
@@ -152,11 +162,57 @@ const static int myBooksCellRow     = 2;
 
 - (IBAction)searchButtonTouched:(id)sender
 {
+	[self shouldOpenSearch:YES];
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:SEARCH_SHOULDSHOW_NOTIFICATION object:self];
+}
+
+-(void)shouldOpenSearch:(BOOL)shouldOpen
+{
+	CGRect searchRect = searchView.frame;
+	
+	CGRect storeRect = _storeBackgroundView.frame;
+	
+	if(searchRect.size.height == 0 && shouldOpen)
+	{
+		//rect.origin.y += 140 - 69;
+		
+		storeRect.origin.y += 76;
+		
+		searchRect.size.height = 76;
+	}
+	else if(searchRect.size.height == 76 && !shouldOpen)
+	{
+		//rect.origin.y -= 140 - 69;
+		
+		storeRect.origin.y -= 76;
+		
+		searchRect.size.height = 0;
+	}
+	
+	(shouldOpen ? [searchTextField becomeFirstResponder] : [searchTextField resignFirstResponder]);
+	
+	[UIView beginAnimations:@"ExpandSearchAnimation" context:nil];
+	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDelay:0.001];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+	
+	searchView.frame = searchRect;
+	
+	_storeBackgroundView.frame = storeRect;
+	
+	[self updateSectionsGeometry];
+	
+	[UIView commitAnimations];
 }
 
 - (IBAction)helpButtonTouched:(id)sender
 {
+	if(searchView.frame.size.height > 0)
+	{
+		[self shouldOpenSearch:NO];
+	}
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:HELP_SHOULDSHOW_NOTIFICATION object:self];
 }
 
@@ -180,16 +236,20 @@ const static int myBooksCellRow     = 2;
 {
     if (tableView == _myBooksTable)
     {
-        MyBooksSectionCell* cell = [tableView dequeueReusableCellWithIdentifier:MyBooksSectionCellID];
-        if (!cell)
-        {
-            cell = (MyBooksSectionCell*)[Utils loadViewOfClass:[MyBooksSectionCell class] FromNibNamed:@"MyBooksSectionCell"];
-        }        
-
+		BookCategoryCell* cell = [tableView dequeueReusableCellWithIdentifier:[BookCategoryCell reuseIdentifier]];
+		if (!cell)
+			cell = (BookCategoryCell*)[Utils loadViewOfClass:[BookCategoryCell class] FromNibNamed:[BookCategoryCell nibName]];
+		
+//        MyBooksSectionCell* cell = [tableView dequeueReusableCellWithIdentifier:MyBooksSectionCellID];
+//        if (!cell)
+//        {
+//            cell = (MyBooksSectionCell*)[Utils loadViewOfClass:[MyBooksSectionCell class] FromNibNamed:@"MyBooksSectionCell"];
+//        }        
+//
         cell.showBottomSeparator = (indexPath.row == [_myBooksSectionTitles count] - 1);        
         cell.title               = [_myBooksSectionTitles objectAtIndex:indexPath.row];
-        cell.icon                = [_myBooksSectionImages objectAtIndex:indexPath.row];
-      
+//        cell.icon                = [_myBooksSectionImages objectAtIndex:indexPath.row];
+		
         return cell;
     }
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -202,6 +262,11 @@ const static int myBooksCellRow     = 2;
 }
 
 #pragma mark TableView delegate
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	cell.backgroundColor = [UIColor clearColor];
+}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -218,6 +283,11 @@ const static int myBooksCellRow     = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if(searchView.frame.size.height > 0)
+	{
+		[self shouldOpenSearch:NO];
+	}
+	
     [self deselectRowIfSelectedAtIndexPath:indexPath inTable:tableView];
     
     if (tableView == _myBooksTable)
@@ -275,8 +345,23 @@ const static int myBooksCellRow     = 2;
     return YES;
 }
 
-- (void)expandButtonTouched:(id)sender
+- (void)expandButtonTouched:(ExpandableView *)sender
 {
+	if(sender == _storeBackgroundView)
+	{
+		if(_myBooksBackgroundView.isExpanded)
+		{
+			[_myBooksBackgroundView expand:NO];
+		}
+	}
+	else
+	{
+		if(_storeBackgroundView.isExpanded)
+		{
+			[_storeBackgroundView expand:NO];
+		}
+	}
+	
     if (!_loadingData)
         [self updateSectionsGeometry];
 }
@@ -286,10 +371,11 @@ const static int myBooksCellRow     = 2;
 {
     int marginiOS7 = 0;
     if ([Utils isiOS7]){
-        marginiOS7 = 60;
+        //marginiOS7 = 60;
+		marginiOS7 = 0;
     }
     
-    CGFloat superViewHeight = _storeBackgroundView.superview.bounds.size.height;
+    CGFloat superViewHeight = _storeBackgroundView.superview.bounds.size.height - _storeBackgroundView.frame.origin.y;
     CGFloat bottomViewHeight = _bottomView.bounds.size.height;
     CGFloat currentMyBooksViewHeight = (_myBooksBackgroundView.isExpanded) ? _myBooksBackgroundView.expandButtonHeight + _myBooksBackgroundView.expandHeight
                                                                            : _myBooksBackgroundView.expandButtonHeight;
@@ -297,15 +383,14 @@ const static int myBooksCellRow     = 2;
     CGFloat newHeight = (_storeBackgroundView.isExpanded && _categories.count > 0) ? superViewHeight - bottomViewHeight - currentMyBooksViewHeight - marginiOS7
                                                           : _storeBackgroundView.expandButtonHeight;
     
+	newHeight += _storeBackgroundView.frame.origin.y;
+	
     return newHeight;
 }
 
 - (void)updateSectionsGeometry;
 {
     int marginiOS7 = 0;
-    if ([Utils isiOS7]){
-        marginiOS7 = 60;
-    }
     
     CGFloat newStoreSectionHeight = [self calculateStoreSectionViewHeight];
     CGFloat newMyBooksSectionY = newStoreSectionHeight + marginiOS7;
@@ -313,8 +398,12 @@ const static int myBooksCellRow     = 2;
     CGRect newFrame = _myBooksBackgroundView.frame;
     newFrame.origin.y = newMyBooksSectionY;
     _myBooksBackgroundView.frame = newFrame;
+	
+	if ([Utils isiOS7]){
+        marginiOS7 = 60;
+    }
     
-    _storeBackgroundView.expandHeight = newStoreSectionHeight - _storeBackgroundView.expandButtonHeight;
+    _storeBackgroundView.expandHeight = newStoreSectionHeight - _storeBackgroundView.expandButtonHeight - _storeBackgroundView.frame.origin.y;
 }
 
 - (void)deselectRowIfSelectedAtIndexPath:(NSIndexPath*)indexPath inTable:(UITableView*)tableView
@@ -384,6 +473,26 @@ const static int myBooksCellRow     = 2;
     {
         [SVProgressHUD dismiss];
     }
+}
+
+#pragma mark TextFieldDelegate
+
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:SEARCH_SHOULDSHOW_NOTIFICATION object:self];
+	
+	return YES;
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	[textField resignFirstResponder];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:SEARCH_SHOULDSHOW_NOTIFICATION object:self];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"SEARCH_TEXT_DID_CHANGE" object:searchTextField.text];
+	
+	return YES;
 }
 
 @end

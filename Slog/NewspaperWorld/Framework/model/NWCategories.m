@@ -116,7 +116,7 @@
 
 - (int)count
 {   
-    return [_categories count];    
+    return (int)[_categories count];
 }
 
 @end

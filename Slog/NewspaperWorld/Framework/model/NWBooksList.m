@@ -88,7 +88,7 @@
 
 - (int)count
 {
-    return [_books count];
+    return (int)[_books count];
 }
 
 @end

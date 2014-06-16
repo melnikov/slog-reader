@@ -18,7 +18,9 @@
 #import "AFNetworking.h"
 #import "NWLocalizationManager.h"
 
-const int booksInRow = 2;
+const int booksInRowIpad = 3;
+
+const int booksInRowIphone = 2;
 
 @interface BooksListViewController (Private)
 
@@ -71,10 +73,12 @@ const int booksInRow = 2;
     [super viewDidLoad];
 
     _tableView.separatorColor = [UIColor clearColor];
-    _tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bookshelf_bg.png"]] autorelease];
+    //_tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bookshelf_bg.png"]] autorelease];
     [self createEmptyListLabel];
 
     self.emptyListText = NSLocalizedString(@"IDS_EMPTY_LIST", nil);
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -118,11 +122,11 @@ const int booksInRow = 2;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([Utils isDeviceiPad])
-    {
-        return ([self booksCount] % booksInRow == 0) ?[self booksCount]/booksInRow : [self booksCount]/booksInRow + 1;
-    }
-    return [self booksCount];
+//    if ([Utils isDeviceiPad])
+//    {
+        return ([self booksCount] % ([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone) == 0) ?[self booksCount]/([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone) : [self booksCount]/([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone) + 1;
+//    }
+//    return [self booksCount];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -139,11 +143,11 @@ const int booksInRow = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (![Utils isDeviceiPad])
-    {
-        NWBookCard* bookCard = [self bookAtIndex:indexPath.row];
-        [self showBookCard:bookCard];
-    }
+//    if (![Utils isDeviceiPad])
+//    {
+//        NWBookCard* bookCard = [self bookAtIndex:(int)indexPath.row];
+//        [self showBookCard:bookCard];
+//    }
 }
 
 #pragma mark Private implementation
@@ -220,18 +224,18 @@ const int booksInRow = 2;
     if (!cell || !indexPath)
         return;
 
-    int startBookIndex = indexPath.row * booksInRow;
+    int startBookIndex = (int)indexPath.row * ([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone);
     [cell.item1 setHidden:YES];
     [cell.item2 setHidden:YES];
     [cell.item3 setHidden:YES];
 
     BookItemView* item = nil;
-    for (int i = 0; i < booksInRow; i++)
+    for (int i = 0; i < ([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone); i++)
     {
         item = nil;
         if (startBookIndex + i < [self booksCount] && i == 0)     item = cell.item1;
         if (startBookIndex + i < [self booksCount] && i == 1)     item = cell.item2;
-        if (booksInRow == 3 && startBookIndex + i < [self booksCount] && i == 2)     item = cell.item3;
+        if (([Utils isDeviceiPad] ? booksInRowIpad : booksInRowIphone) == 3 && startBookIndex + i < [self booksCount] && i == 2)     item = cell.item3;
 
         NWBookCard* book = [self bookAtIndex:startBookIndex + i];
         if (!book)
@@ -257,26 +261,26 @@ const int booksInRow = 2;
     if (!cell || !indexPath)
         return;
 
-    if ([Utils isDeviceiPad])
-    {
+//    if ([Utils isDeviceiPad])
+//    {
         [self fillTabletCell:cell AtIndexPath:indexPath];
-    }
-    else
-    {
-        NWBookCard* book = [self bookAtIndex:indexPath.row];
-        [[NWDataModel sharedModel].purchasedBooksCache load];
-        NWBookCacheItem* purchasedBook = [[NWDataModel sharedModel].purchasedBooksCache cacheItemWithID:book.ID];
-
-        if ((purchasedBook) && (purchasedBook.bookCard.isSold)) {
-            book.isSold = YES;
-        }
-        
-        if (!book)
-            return;
-
-
-        [self setupBookItemView:cell.item1 withBookCard:book];
-    }
+//    }
+//    else
+//    {
+//        NWBookCard* book = [self bookAtIndex:(int)indexPath.row];
+//        [[NWDataModel sharedModel].purchasedBooksCache load];
+//        NWBookCacheItem* purchasedBook = [[NWDataModel sharedModel].purchasedBooksCache cacheItemWithID:book.ID];
+//
+//        if ((purchasedBook) && (purchasedBook.bookCard.isSold)) {
+//            book.isSold = YES;
+//        }
+//        
+//        if (!book)
+//            return;
+//
+//
+//        [self setupBookItemView:cell.item1 withBookCard:book];
+//    }
 }
 
 - (void)handleNotification:(NSNotification*)notification

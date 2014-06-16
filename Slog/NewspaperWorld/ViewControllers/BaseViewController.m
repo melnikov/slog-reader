@@ -61,13 +61,61 @@ static void releaseDetailsArray()
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+	
     if (self.navigationController.navigationBar)
+	{
         [[UIStyleManager instance] applyStyle:@"NavigationBar_iPad" toView:self.navigationController.navigationBar];
+		
+		if([Utils isDeviceiPad])
+		{
+			[self.navigationController.navigationBar setBackgroundImage:[[UIImage new] autorelease] forBarMetrics:UIBarMetricsDefault];
+		}
+		else
+		{
+			if(IS_OS_5_OR_LATER)
+				[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_background.png"] forBarMetrics:UIBarMetricsDefault];
+			
+			if(IS_OS_7_OR_LATER)
+				[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_background_ios7.png"] forBarMetrics:UIBarMetricsDefault];
+		}
+		
+		if(IS_OS_6_OR_LATER)
+			[self.navigationController.navigationBar setShadowImage:[[UIImage new] autorelease]];
+		
+		[self.navigationController.navigationBar setTintColor:RGB(180, 6, 16)];
+		
+		if(IS_OS_6_OR_LATER)
+			self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : RGB(180, 6, 16)};
+	}
 
     [self initializeDetailViewController];
+	
+	background = [[UIImageView alloc] initWithFrame:self.view.frame];
+	
+	background.contentMode = UIViewContentModeScaleToFill;
+	
+	background.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+}
 
-  }
+-(void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+	
+	if(!background.superview)
+	{
+		[self.view insertSubview:background atIndex:0];
+		
+		background.frame = self.view.frame;
+		
+		CGRect rect = background.frame;
+		
+		rect.origin.y = -self.navigationController.navigationBar.frame.size.height;
+		
+		rect.size.height += self.navigationController.navigationBar.frame.size.height;
+		
+		background.frame = rect;
+	}
+}
 
 - (void)initializeDetailViewController
 {
@@ -128,6 +176,15 @@ static void releaseDetailsArray()
         [BaseViewController removeMasterButtonForAll];
     }
 }
+
+//-(void)viewWillDisappear:(BOOL)animated
+//{
+//	if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+//        [self.navigationController popViewControllerAnimated:animated];
+//    }
+//	
+//	[super viewWillDisappear:animated];
+//}
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
@@ -453,7 +510,7 @@ static void releaseDetailsArray()
 
 - (UISplitViewController*)splitViewController
 {
-    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    //AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     return appDelegate.splitViewController;
 }
 

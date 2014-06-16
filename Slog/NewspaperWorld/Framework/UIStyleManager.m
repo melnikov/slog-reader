@@ -240,7 +240,7 @@ static UIStyleManager* instance_ = nil;
 - (void)applyStyleForBar:(UINavigationBar*)bar Style:(NSString*)styleName {
   if (bar == nil)
     return;
-  
+	
   NSDictionary* styles = [contentOfStylesFile objectForKey:styleName];
   if(styles == nil)
     return;
@@ -289,7 +289,13 @@ static UIStyleManager* instance_ = nil;
         //[bar insertSubview:bgView atIndex:0];
       }
     }
-  }  
+  }
+	
+//	bar.translucent = YES;
+//	
+//	bar.backgroundColor = [UIColor clearColor];
+	
+//	bar.barTintColor = [UIColor clearColor];
 }
 
 - (void)applyStyleForSegmentedControl:(UISegmentedControl*)view Style:(NSString*)styleName {

@@ -104,6 +104,9 @@
                                                                                   style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                              action:@selector(backButtonTouched:)] autorelease];
+	
+	if(!IS_OS_7_OR_LATER && ![Utils isDeviceiPad])
+		self.navigationController.navigationBar.backgroundColor = RGB(242, 242, 242);
 }
 
 - (IBAction)backButtonTouched:(id)sender

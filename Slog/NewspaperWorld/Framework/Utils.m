@@ -223,7 +223,7 @@
 {
   const char *cStr = [strData UTF8String];
   unsigned char result[16];
-  CC_MD5(cStr, strlen(cStr), result);
+  CC_MD5(cStr, (CC_LONG)strlen(cStr), result);
   return [NSString stringWithFormat:
           @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
           result[0], result[1], result[2], result[3], 
@@ -479,7 +479,7 @@
     NSString* result = [NSString stringWithString:self];
         
     BOOL waitBreak = NO;
-    int index =[self length]-1;
+    int index = (int)[self length]-1;
     for (; index >= 0; index--)
     {
         unichar ch = [self characterAtIndex:index];

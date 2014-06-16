@@ -58,7 +58,9 @@ const static int myBooksCellRow     = 2;
     {
         self.navigationController.tabBarItem.title = NSLocalizedString(@"IDS_MY_BOOKS_TITLE", @"");
     }
-    [Utils setEmptyFooterToTable:_tableView];    
+    [Utils setEmptyFooterToTable:_tableView];
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
@@ -107,6 +109,9 @@ const static int myBooksCellRow     = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if(![Utils isDeviceiPad])
+		return;
+	
     if (indexPath.row == lastBookCellRow)
     {
         [ReadBookViewController readBookCacheItem:[NWDataModel sharedModel].lastReadedBook parent:self];
@@ -137,4 +142,20 @@ const static int myBooksCellRow     = 2;
     [cell setSelectedBackgroundView:bgCellView];
     [bgCellView release];
 }
+
+- (IBAction)continueReadingPressed
+{
+	[ReadBookViewController readBookCacheItem:[NWDataModel sharedModel].lastReadedBook parent:self];
+}
+
+- (IBAction)bookListPressed
+{
+	[self.navigationController pushViewController:[MyBooksListViewController createViewController] animated:YES];
+}
+
+- (IBAction)demoVersionsPressed
+{
+	[self.navigationController pushViewController:[DemoFragmentsViewController createViewController] animated:YES];
+}
+
 @end

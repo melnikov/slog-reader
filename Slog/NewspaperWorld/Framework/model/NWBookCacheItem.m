@@ -202,7 +202,7 @@ const int COVER_TOTAL_COUNT_MAX = 100;
 
     NSFileManager* fileMgr = [NSFileManager defaultManager];
     NSString* coverFolder = [_coverImagePath stringByDeletingLastPathComponent];
-    int sz = [fileMgr enumeratorAtPath:coverFolder].allObjects.count;
+    int sz = (int)[fileMgr enumeratorAtPath:coverFolder].allObjects.count;
 
     return sz;
 }

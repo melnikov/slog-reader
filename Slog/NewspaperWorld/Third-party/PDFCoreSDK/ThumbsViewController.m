@@ -96,13 +96,20 @@
 
 	self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
 	CGRect viewRect = self.view.bounds; // View controller's view bounds
-	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
+	CGRect toolbarRect = viewRect;
+	if(IS_OS_7_OR_LATER)
+		toolbarRect.origin.y = 20;
+	toolbarRect.size.height = TOOLBAR_HEIGHT;
 
 	mainToolbar = [[ThumbsMainToolbar alloc] initWithFrame:toolbarRect title:_bookCacheItem.bookCard.title]; // At top
 	mainToolbar.delegate = self;
-    mainToolbar.tintColor = UI_RED_COLOR;
+	if(IS_OS_7_OR_LATER)
+		mainToolbar.tintColor = RGB(136, 24, 17);
+	else
+		mainToolbar.tintColor = [UIColor whiteColor];
     UINavigationItem *navItem = [[UINavigationItem alloc] init];
     navItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"IDS_BACK", @"") style:UIBarButtonItemStyleBordered target:self action:@selector(backBtn)];
+	navItem.leftBarButtonItem.tintColor = RGB(136, 24, 17);
     NSMutableArray* arr = [[NSMutableArray alloc] init];
     [arr addObject:navItem.leftBarButtonItem];
     [arr addObjectsFromArray:mainToolbar.items];
@@ -126,7 +133,7 @@
 	theThumbsView = [[ReaderThumbsView alloc] initWithFrame:thumbsRect]; // Rest
 	theThumbsView.contentInset = insets; theThumbsView.scrollIndicatorInsets = insets;
 	theThumbsView.delegate = self;
-    theThumbsView.backgroundColor = UI_YELLOW_COLOR;
+    theThumbsView.backgroundColor = [UIColor whiteColor];
 
 	[self.view insertSubview:theThumbsView belowSubview:mainToolbar];
 

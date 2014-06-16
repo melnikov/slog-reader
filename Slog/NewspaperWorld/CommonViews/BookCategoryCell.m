@@ -62,7 +62,7 @@
 
 - (void)animateAccessory
 {
-  NSTimeInterval animationDuration = 0.5;
+  NSTimeInterval animationDuration = 0.3;
   
   NSString* zoomInID = @"zoomInID";
   [UIView beginAnimations:zoomInID context:nil];
@@ -101,14 +101,19 @@
     return _titleLabel.text;
 }
 
+-(UILabel*)textLabel
+{
+	return _titleLabel;
+}
+
 - (void)setShowTopSeparator:(BOOL)newValue
 {
-    [_topSeparator setHidden:!newValue];
+    //[_topSeparator setHidden:!newValue];
 }
 
 - (void)setShowBottomSeparator:(BOOL)newValue
 {
-    [_bottomSeparator setHidden:!newValue];
+//    [_bottomSeparator setHidden:!newValue];
 }
 
 - (BOOL)showBottomSeparator

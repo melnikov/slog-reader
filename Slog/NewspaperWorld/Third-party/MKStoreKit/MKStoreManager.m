@@ -304,7 +304,7 @@ static MKStoreManager* _sharedStoreManager;
     [productsArray addObjectsFromArray:nonConsumables];
     [productsArray addObjectsFromArray:subscriptions];
     
-    int itemCount = productsArray.count;
+    int itemCount = (int)productsArray.count;
     NSError *error = nil;
     
     //loop through all the saved keychain data and remove it    

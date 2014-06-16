@@ -15,6 +15,8 @@
 @interface BaseViewController : UIViewController<UIGestureRecognizerDelegate>
 {
     UIAlertView*    _errorAlert;
+	
+	UIImageView * background;
 }
 
 @property (nonatomic, retain)   NSString* navigationBarTitle;

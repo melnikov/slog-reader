@@ -9,9 +9,9 @@
 "IDS_BOOKSTORE_TAB_TITLE"   = "Магазин";
 "IDS_SEARCH_TAB_TITLE"      = "Поиск";
 "IDS_READ_LAST"             = "Продолжить чтение";
-"IDS_FRAGMENTS"             = "Демо-версия";
+"IDS_FRAGMENTS"             = "Демо - книги";
 "IDS_MY_BOOKS_TITLE"        = "Моя библиотека";
-"IDS_MY_BOOKS_LIST"         = "Список книг";
+"IDS_MY_BOOKS_LIST"         = "Мои книги";
 "IDS_HELP"                  = "Помощь";
 "IDS_HOW_TO_USE"            = "Как использовать";
 "IDS_ABOUT_APP"             = "О программе";

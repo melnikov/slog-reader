@@ -29,6 +29,9 @@
 #import "FB2PageLinkItem.h"
 #import "NWDetailPosition.h"
 
+#define MAX_FONT_SIZE 22
+#define MIN_FONT_SIZE 12
+
 static const float THERESOLD = 0.15; 
 static const unsigned long long MIN_ZIP_FILE_SIZE = 20; // min header for ZIP file is 20 byte
 
@@ -156,6 +159,8 @@ typedef enum
 
     [_frontFB2View2 release];
     [_backFB2View2 release];
+	[_upperPanel release];
+	[titleLabel release];
     [super dealloc];
 }
 
@@ -248,6 +253,10 @@ typedef enum
     _frontFB2View2 = nil;
     [_backFB2View2 release];
     _backFB2View2 = nil;
+	[_upperPanel release];
+	_upperPanel = nil;
+	[titleLabel release];
+	titleLabel = nil;
     [super viewDidUnload];
 }
 
@@ -385,8 +394,10 @@ typedef enum
                 
         self.popover = [[[UIPopoverController alloc] initWithContentViewController:navi] autorelease];
         vc.parentPopover = self.popover;
-        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender 
-                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+//        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender 
+//                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		
+		[popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
     else
         [self presentModalViewController:navi animated:YES];    
@@ -409,8 +420,10 @@ typedef enum
         
         self.popover = [[[UIPopoverController alloc] initWithContentViewController:navi] autorelease];
         vc.parentPopover = self.popover;
-        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender 
-                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+//        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender
+//                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		
+		[popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
     else
         [self presentModalViewController:navi animated:YES];  
@@ -431,8 +444,10 @@ typedef enum
         
         self.popover = [[[UIPopoverController alloc] initWithContentViewController:navi] autorelease];
         vc.parentPopover = self.popover;
-        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender
-                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+//        [popover presentPopoverFromBarButtonItem:(UIBarButtonItem*)sender
+//                        permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		
+		[popover presentPopoverFromRect:[sender frame] inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
     else
         [self presentModalViewController:navi animated:YES];
@@ -1161,7 +1176,7 @@ typedef enum
         _customNavigationItem.rightBarButtonItem = buttons;
         [buttons release];
     }
-            
+    
     _toolbar.clearsContextBeforeDrawing = NO;
     _toolbar.clipsToBounds = NO;
     if ([Utils isDeviceiPad])
@@ -1175,6 +1190,7 @@ typedef enum
     [self hideReturnButton];
 
      _customNavigationItem.title = _bookCacheItem.bookCard.title;
+	titleLabel.text = _bookCacheItem.bookCard.title;
 }
 
 - (void)deinitializeControls
@@ -1362,25 +1378,28 @@ typedef enum
 
 - (void)showPanels
 {
-    if (_navigationBar.alpha !=0)
+    if (_bottomPanel.alpha !=0)
         return;
     
     static NSString * const animationID = @"fadein";
     _navigationBar.alpha = 0.0;
     _bottomPanel.alpha = 0.0;
+	_upperPanel.alpha = 0.0;
     [UIView beginAnimations:animationID context:nil];
     [UIView setAnimationDuration:0.2];    
     _navigationBar.alpha = 1.0;   
     _bottomPanel.alpha = 1.0;
+	_upperPanel.alpha = 1.0;
     [self.view bringSubviewToFront:_navigationBar];
     [self.view bringSubviewToFront:_bottomPanel];
+	[self.view bringSubviewToFront:_upperPanel];
     _visibleMenu = YES;
     [UIView commitAnimations];
 }
 
 - (void)hidePanels
 {
-    if (_navigationBar.alpha != 1.0)
+    if (_bottomPanel.alpha != 1.0)
         return;
     
     static NSString * const animationID = @"fadeout";
@@ -1388,12 +1407,13 @@ typedef enum
     
     _navigationBar.alpha = 1.0;
     _bottomPanel.alpha = 1.0;
+	_upperPanel.alpha = 1.0;
     
     [UIView beginAnimations:animationID context:nil];
     [UIView setAnimationDuration:0.2];    
     _navigationBar.alpha = 0.0;
     _bottomPanel.alpha = 0.0;
-    
+    _upperPanel.alpha = 0.0;
     [UIView commitAnimations];
 }
 
@@ -1561,6 +1581,34 @@ typedef enum
         
         [self generateBookPages];
     }
+}
+
+- (IBAction)incrementButtonTouched:(id)sender
+{
+    if ([NWSettings sharedSettings].readerFontSize < MAX_FONT_SIZE)
+    {
+        [NWSettings sharedSettings].readerFontSize++;
+        //[self updateTextExample];
+		
+		[_portraitPagesGenerator clear];
+        [_landscapePagesGenerator clear];
+		
+		[self generateBookPages];
+    }
+}
+
+- (IBAction)decrementButtonTouched:(id)sender
+{
+	if ([NWSettings sharedSettings].readerFontSize > MIN_FONT_SIZE)
+	{
+		[NWSettings sharedSettings].readerFontSize--;
+		//[self updateTextExample];
+		
+		[_portraitPagesGenerator clear];
+        [_landscapePagesGenerator clear];
+		
+		[self generateBookPages];
+	}
 }
 
 #pragma mark DecodeOperation delegate

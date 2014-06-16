@@ -344,7 +344,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveLastPosition) name:@"didEnterBackground" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveBookmarks) name:@"didEnterBackground" object:nil];
 
-	self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+	self.view.backgroundColor = [UIColor whiteColor];
 
 	CGRect viewRect = self.view.bounds; // View controller's view bounds
 	theScrollView = [[UIScrollView alloc] initWithFrame:viewRect]; // All
@@ -363,12 +363,19 @@
 	[self.view addSubview:theScrollView];
 
 	CGRect toolbarRect = viewRect;
+	if(IS_OS_7_OR_LATER)
+		toolbarRect.origin.y = 20;
 	toolbarRect.size.height = TOOLBAR_HEIGHT;
 	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // At top
 	mainToolbar.delegate = self;
-    mainToolbar.tintColor = UI_RED_COLOR;
+	if(IS_OS_7_OR_LATER)
+		mainToolbar.tintColor = RGB(136, 24, 17);
+	else
+		mainToolbar.tintColor = [UIColor whiteColor];
+	mainToolbar.backgroundColor = RGB(242, 242, 242);
     UINavigationItem *navItem = [[UINavigationItem alloc] init];
     navItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"IDS_BACK", @"") style:UIBarButtonItemStyleBordered target:self action:@selector(backBtn)];
+	navItem.leftBarButtonItem.tintColor = RGB(136, 24, 17);
     NSMutableArray* arr = [[NSMutableArray alloc] init];
     [arr addObject:navItem.leftBarButtonItem];
     [arr addObjectsFromArray:mainToolbar.items];
@@ -382,7 +389,7 @@
 	pagebarRect.origin.y = (viewRect.size.height - PAGEBAR_HEIGHT);
 	mainPagebar = [[ReaderMainPagebar alloc] initWithFrame:pagebarRect document:document]; // At bottom
 	mainPagebar.delegate = self;
-    mainPagebar.backgroundColor = UI_RED_COLOR;
+    mainPagebar.backgroundColor = [UIColor whiteColor];
 
 	[self.view addSubview:mainPagebar];
 
@@ -401,7 +408,7 @@
 	[singleTapOne requireGestureRecognizerToFail:doubleTapOne]; // Single tap requires double tap to fail
 
 	contentViews = [NSMutableDictionary new]; lastHideTime = [NSDate date];
-    self.view.backgroundColor = UI_YELLOW_COLOR;
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self initBookData];
 

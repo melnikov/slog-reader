@@ -12,7 +12,7 @@
  This class is used in ipad version. 
  It provide main navigation functions in application.
  */
-@interface SplitMasterViewController : BookCategoriesViewController<ExpandableViewDelegate>
+@interface SplitMasterViewController : BookCategoriesViewController<ExpandableViewDelegate, UITextFieldDelegate>
 {
     /// expandable panel for table with store catalog
     IBOutlet ExpandableView* _storeBackgroundView;
@@ -37,6 +37,9 @@
     NSIndexPath* _myBooksLastSelectedIndex;
     
     NSIndexPath* _storeLastSelectedIndex;
+	
+	IBOutlet UIView *searchView;
+	IBOutlet UITextField *searchTextField;
 }
 ///TODO: comment
 - (IBAction)searchButtonTouched:(id)sender;

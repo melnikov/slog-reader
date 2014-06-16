@@ -29,6 +29,11 @@
 {
         
     IBOutlet UIView* _bottomPanel;
+
+	IBOutlet UIView *_upperPanel;
+	
+	IBOutlet UILabel *titleLabel;
+	
     UIButton* returnButton;
     
     IBOutlet UIView* _frontPage;    
@@ -48,7 +53,7 @@
 
     IBOutlet UINavigationItem*  _customNavigationItem; 
     IBOutlet UINavigationBar*   _navigationBar;
-    
+	
     IBOutlet UIView*    _fadeView;       
  
     IBOutlet UISlider*  _bookSlider;    

@@ -35,11 +35,15 @@
     if (self.navigationController.tabBarItem)
     {
         self.navigationController.tabBarItem.title = NSLocalizedString(@"IDS_SEARCH_TAB_TITLE", @"");
+		
+		self.title = NSLocalizedString(@"IDS_SEARCH_TAB_TITLE", @"");
     }
     
     self.emptyListText = NSLocalizedString(@"IDS_EMPTY_LIST",@"");
     
     _searchBar.placeholder = NSLocalizedString(@"IDS_TOUCH_FOR_SEARCH", @"");
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(searchTextDidChange:) name:@"SEARCH_TEXT_DID_CHANGE" object:nil];
 }
 
 - (void)deinitiliaze
@@ -67,7 +71,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
     if (UIInterfaceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
         NSMutableArray* searchBarItems = [NSMutableArray arrayWithArray:_searchToolbar.items];
@@ -84,10 +88,28 @@
         
         [_searchToolbar setItems:searchBarItems animated:YES];
     }
+	
+	
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"SEARCH_TEXT_DID_CHANGE" object:nil];
+}
+
+-(void)searchTextDidChange:(NSNotification*)notif
+{
+	_searchBar.text = notif.object;
+	
+	[self searchBarSearchButtonClicked:_searchBar];
 }
 
 - (void)viewDidLayoutSubviews
 {
+	[super viewDidLayoutSubviews];
+	
     NSMutableArray* searchBarItems = [NSMutableArray arrayWithArray:_searchToolbar.items];
     if ([self isKindOfClass:[SearchViewController class]]) {
         [_searchToolbar setItems:searchBarItems animated:YES];

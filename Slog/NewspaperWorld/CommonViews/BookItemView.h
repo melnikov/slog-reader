@@ -11,6 +11,8 @@
 @private
 
     IBOutlet UIImageView*    _bookCoverView;
+	
+	IBOutlet UIImageView*    _bookCoverViewMirror;
 
     IBOutlet UILabel*     _bookAuthorsView;
 
@@ -64,6 +66,8 @@
 @property (nonatomic, assign)  NSObject<BookItemViewDelegate>* delegate;
 
 @property (nonatomic, readonly) UIImageView* bookCoverView;
+
+@property (nonatomic, readonly) UIImageView* bookCoverViewMirror;
 
 @property (nonatomic, readonly) UIButton* buyButton;
 

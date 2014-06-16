@@ -40,6 +40,8 @@
      
     self.navigationItem.title = _informationTitle;
     [_textView setText:_informationText];
+	
+	background.image = [UIImage imageNamed:@"background_vert.jpg"];
 }
 
 - (void)viewDidUnload
