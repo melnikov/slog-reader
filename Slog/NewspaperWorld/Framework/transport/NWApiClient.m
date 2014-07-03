@@ -16,6 +16,7 @@
 #import "NWPurchaseManager.h"
 #import "Constants.h"
 #import "NWLocalizationManager.h"
+#import "NSString+MD5Addition.h"
 
 static NWApiClient* _instance = nil;
 
@@ -104,9 +105,21 @@ static void singleton_remover()
 - (void)authorizeApplicationWithUID:(NSString*)UID
                            delegate:(NSObject<NWApiClientDelegate>*)delegate
 {
-    NSDictionary* parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    UID,                                 NWApiRequestParameterUID,
-                                    [self generateSecretKeyForUID:UID],  NWApiRequestParameterSecretKey, nil];
+	NSString * filePath = [[Utils documentsDirectoryPath] stringByAppendingPathComponent:@"access"];
+	
+	if([[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:NO])
+	{
+		NSStringEncoding encoding = 0;
+		
+		UID = [[NSString stringWithContentsOfFile:filePath usedEncoding:&encoding error:NULL] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\n"]];
+	}
+	
+	NSString * secretKey = [self generateSecretKeyForUID:UID];
+	
+	NSDictionary* parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    UID,       NWApiRequestParameterUID,
+                                    secretKey, NWApiRequestParameterSecretKey, nil];
+	
     [self invokeMethodNamed:NWApiMethodAuthorize parameters:parameters delegate:delegate];
 }
 
